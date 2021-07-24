@@ -1,7 +1,6 @@
 import Pool from '@utils/pool';
 import { queriesPremisess } from '@utils/queries';
 import { establecimiento } from '@interfaces/establecimientos';
-import { report } from 'process';
 
 const pool = Pool.getInstance();
 

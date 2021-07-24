@@ -17,12 +17,10 @@ exports.queriesPremisess = {
 };
 exports.queriesProduct = {
     GET_PRODUCT: `SELECT * FROM producto`,
-    GET_PRODUCT_BY_PREMISESS: `SELECT * FROM producto, producto_establecimiento WHERE producto.id_producto = producto_establecimiento.id_producto AND producto_establecimiento.id_establecimiento = $1 AND disponible = true`,
-    INSERT_PRODUCT: `INSERT INTO producto (nombre, descripcion) VALUES ($1, $2) RETURNING *`,
-    INSERT_PRODUCT_PREMISSES: `INSERT INTO producto_establecimiento (id_producto, id_establecimiento, precio, disponible) VALUES ($1, $2, $3, $4) RETURNING *`,
-    UPDATE_PRODUCT: `UPDATE producto SET nombre = $1, descripcion = $2 WHERE id_producto = $3`,
-    UPDATE_PRICE_PRODUCT: `UPDATE producto_establecimiento SET precio = $1 WHERE id_producto = $2 AND id_establecimiento = $3`,
-    SET_AVAILABILITY: `UPDATE producto_establecimiento SET disponible = not disponible WHERE id_producto = $2 AND id_establecimiento = $3`,
+    GET_PRODUCT_BY_PREMISESS: `SELECT * FROM producto WHERE id_establecimiento = $1 AND disponible = true`,
+    INSERT_PRODUCT: `INSERT INTO producto (nombre, descripcion,precio, disponible, id_establecimiento) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+    UPDATE_PRODUCT: `UPDATE producto SET nombre = $1, descripcion = $2, precio = $3  WHERE id_producto = $4 RETURNING *`,
+    SET_AVAILABILITY: `UPDATE producto SET disponible = not disponible WHERE id_producto = $1 RETURNING *`,
     DELETE_PRODUCT: `DELETE FROM producto WHERE id_producto = $1`
 };
 //# sourceMappingURL=queries.js.map

@@ -16,9 +16,7 @@ export declare const queriesProduct: {
     GET_PRODUCT: string;
     GET_PRODUCT_BY_PREMISESS: string;
     INSERT_PRODUCT: string;
-    INSERT_PRODUCT_PREMISSES: string;
     UPDATE_PRODUCT: string;
-    UPDATE_PRICE_PRODUCT: string;
     SET_AVAILABILITY: string;
     DELETE_PRODUCT: string;
 };

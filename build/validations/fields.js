@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkResult = exports.productValidation = exports.premisessValidation = exports.loginFieldsValidation = exports.updateUserFieldsValidation = exports.signUpFieldsValidation = void 0;
+exports.checkResult = exports.updateProductValidation = exports.productValidation = exports.premisessValidation = exports.loginFieldsValidation = exports.updateUserFieldsValidation = exports.signUpFieldsValidation = void 0;
 const express_validator_1 = require("express-validator");
 const express_validator_2 = require("express-validator");
 exports.signUpFieldsValidation = [
@@ -29,7 +29,13 @@ exports.premisessValidation = [
 ];
 exports.productValidation = [
     express_validator_2.check('nombre').notEmpty({ ignore_whitespace: true }).withMessage('Es necesario un nombre para el producto').isString().withMessage('nombre invalido'),
-    express_validator_2.check('descripcion').notEmpty({ ignore_whitespace: true }).withMessage('Falta una descripcion').isEmail().isLength({ min: 4, max: 100 }).withMessage('descripcion invalida'),
+    express_validator_2.check('descripcion').notEmpty({ ignore_whitespace: true }).withMessage('Falta una descripcion').isString().isLength({ min: 4, max: 100 }).withMessage('descripcion invalida'),
+    express_validator_2.check('precio').notEmpty({ ignore_whitespace: true }).withMessage('Es necesario un monto').isNumeric().withMessage('Monto invalido'),
+    express_validator_2.check('disponible').notEmpty({ ignore_whitespace: true }).withMessage('Es necesario indicar la disponibilidad').isBoolean().withMessage('valor invalido'),
+];
+exports.updateProductValidation = [
+    express_validator_2.check('nombre').notEmpty({ ignore_whitespace: true }).withMessage('Es necesario un nombre para el producto').isString().withMessage('nombre invalido'),
+    express_validator_2.check('descripcion').notEmpty({ ignore_whitespace: true }).withMessage('Falta una descripcion').isString().isLength({ min: 4, max: 100 }).withMessage('descripcion invalida'),
     express_validator_2.check('precio').notEmpty({ ignore_whitespace: true }).withMessage('Es necesario un monto').isNumeric().withMessage('Monto invalido'),
 ];
 const checkResult = (req, res, next) => {

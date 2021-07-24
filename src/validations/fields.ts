@@ -32,7 +32,14 @@ export const premisessValidation = [
 
 export const productValidation = [
   check('nombre').notEmpty({ ignore_whitespace: true }).withMessage('Es necesario un nombre para el producto').isString().withMessage('nombre invalido'),
-  check('descripcion').notEmpty({ ignore_whitespace: true }).withMessage('Falta una descripcion').isEmail().isLength({min:4, max:100}).withMessage('descripcion invalida'),
+  check('descripcion').notEmpty({ ignore_whitespace: true }).withMessage('Falta una descripcion').isString().isLength({min:4, max:100}).withMessage('descripcion invalida'),
+  check('precio').notEmpty({ ignore_whitespace: true }).withMessage('Es necesario un monto').isNumeric().withMessage('Monto invalido'),
+  check('disponible').notEmpty({ ignore_whitespace: true }).withMessage('Es necesario indicar la disponibilidad').isBoolean().withMessage('valor invalido'),
+];
+
+export const updateProductValidation = [
+  check('nombre').notEmpty({ ignore_whitespace: true }).withMessage('Es necesario un nombre para el producto').isString().withMessage('nombre invalido'),
+  check('descripcion').notEmpty({ ignore_whitespace: true }).withMessage('Falta una descripcion').isString().isLength({min:4, max:100}).withMessage('descripcion invalida'),
   check('precio').notEmpty({ ignore_whitespace: true }).withMessage('Es necesario un monto').isNumeric().withMessage('Monto invalido'),
 ]
 
