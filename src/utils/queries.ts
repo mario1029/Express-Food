@@ -8,9 +8,9 @@ export const queries = {
 
 export const queriesPremisess={
   GET_PREMISESS:`SELECT * FROM establecimiento`,
-  GET_PREMISESS_BY_ADDRESS:`SELECT * FROM establecimkento WHERE  UPPER(direccion) like '%' || UPPER($1) || '%'`,
-  INSERT_PREMISESS:`INSERT INTO (nombre, direccion, correoE, numeroContacto, urlPagina, correo) values ($1, $2, $3, $4, $5, $6) RETURNING *`,
-  UPDATE_PREMISSES:`UPDATE establecimiento SET nombre = $1, direccion = $2, correoE = $3, numeroContacto = $4, urlPagina = $5 where id_establecimiento = $6 RETURNING *`,
+  GET_PREMISESS_BY_ADDRESS:`SELECT * FROM establecimiento WHERE  UPPER(direccion) like '%' || UPPER($1) || '%'`,
+  INSERT_PREMISESS:`INSERT INTO establecimiento (nombre, direccion, correoe, numerocontacto, urlpagina, correo) values ($1, $2, $3, $4, $5, $6) RETURNING *`,
+  UPDATE_PREMISSES:`UPDATE establecimiento SET nombre = $1, direccion = $2, correoe = $3, numerocontacto = $4, urlpagina = $5 where id_establecimiento = $6 RETURNING *`,
   DELETE_PREMISSE:`DELETE FROM establecimiento WHERE id_establecimiento = $1`
 }
 

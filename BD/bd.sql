@@ -23,9 +23,9 @@ CREATE TABLE "establecimiento" (
   "id_establecimiento" SERIAL PRIMARY KEY,
   "nombre" varchar,
   "direccion" varchar,
-  "correoE" varchar,
-  "numeroContacto" varchar,
-  "urlPagina" varchar,
+  "correoe" varchar,
+  "numerocontacto" varchar,
+  "urlpagina" varchar,
   "correo" varchar
 );
 

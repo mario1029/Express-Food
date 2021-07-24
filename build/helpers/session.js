@@ -51,7 +51,7 @@ const getUserByEmail = async (correo) => {
         const users = {
             nombre: response.nombre,
             correo: response.correo,
-            contrasenia: response.constrasenia,
+            contrasenia: response.contrasenia,
             numero: response.numero,
             direccion: response.direccion
         };
