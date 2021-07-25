@@ -17,7 +17,8 @@ const getProduct = async (idEstablecimieto) => {
                 nombre: rows.nombre,
                 descripcion: rows.descripcion,
                 precio: rows.precio,
-                disponible: rows.disponible
+                disponible: rows.disponible,
+                urlfoto: rows.urlfoto
             };
         });
         return product;
@@ -40,7 +41,8 @@ const getProductFilter = async (idEstablecimiento) => {
                 id_producto: rows.id_producto,
                 nombre: rows.nombre,
                 descripcion: rows.descripcion,
-                precio: rows.precio
+                precio: rows.precio,
+                urlfoto: rows.urlfoto
             };
         });
         return product;

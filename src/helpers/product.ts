@@ -14,7 +14,8 @@ export const getProduct= async(idEstablecimieto:number): Promise<producto[]>=>{
                 nombre: rows.nombre,
                 descripcion: rows.descripcion,
                 precio: rows.precio,
-                disponible:rows.disponible
+                disponible:rows.disponible,
+                urlfoto:rows.urlfoto
             }
         })
         return product;
@@ -35,7 +36,8 @@ export const getProductFilter= async(idEstablecimiento:number): Promise<producto
                 id_producto: rows.id_producto,
                 nombre: rows.nombre,
                 descripcion: rows.descripcion,
-                precio: rows.precio
+                precio: rows.precio,
+                urlfoto:rows.urlfoto
             }
         })
         return product;

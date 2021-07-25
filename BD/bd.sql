@@ -27,6 +27,7 @@ CREATE TABLE "establecimiento" (
   "numerocontacto" varchar,
   "urlpagina" varchar,
   "urlfoto" varchar,
+  "aprobado" boolean DEFAULT false,
   "correo" varchar
 );
 

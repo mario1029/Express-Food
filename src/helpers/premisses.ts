@@ -14,7 +14,9 @@ export const getPremisess= async ():Promise<establecimiento[]> =>{
                 correoE: rows.correoe,
                 numeroContacto: rows.numerocontacto,
                 direccion: rows.direccion,
-                urlPagina: rows.urlpagina
+                urlPagina: rows.urlpagina,
+                aprobado: rows.aprobado,
+                urlFoto: rows.urlfoto
             }
         })
         return user;
@@ -36,7 +38,8 @@ export const getPremisessByAddress= async (direccion:string):Promise<establecimi
                 correoE: rows.correoe,
                 numeroContacto: rows.numerocontacto,
                 direccion: rows.direccion,
-                urlPagina: rows.urlpagina
+                urlPagina: rows.urlpagina,
+                urlFoto: rows.urlfoto
             }
         })
         return user;
@@ -84,6 +87,30 @@ export const updatePremisses=async({promisse,id}:{promisse:establecimiento, id: 
             numeroContacto: response.numerocontacto,
             direccion: response.direccion,
             urlPagina: response.urlpagina
+        }
+        await client.query('COMMIT');
+        return user;
+    } catch (e) {
+        await client.query('CALLBACK');
+        console.log(e);
+        throw e;
+    } finally {
+        client.release();
+    }
+};
+
+export const approvedPremisses=async(id: number):Promise<establecimiento>=>{
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        const response = (await client.query(queriesPremisess.SET_APPROVED,[id])).rows[0];
+        const user: establecimiento = {
+            nombre: response.nombre,
+            correoE: response.correoe,
+            numeroContacto: response.numerocontacto,
+            direccion: response.direccion,
+            urlPagina: response.urlpagina,
+            aprobado: response.aprobado
         }
         await client.query('COMMIT');
         return user;

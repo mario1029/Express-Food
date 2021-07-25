@@ -34,6 +34,15 @@ router.post('/new', fields_1.premisessValidation, fields_1.checkResult, async (r
         res.status(500).json({ status: 500, error: e, message: 'Error al crear el establecimiento' });
     }
 });
+router.put('/approved/:id', async (req, res) => {
+    try {
+        const establecimiento = await premisses_1.approvedPremisses(+req.params.id);
+        res.status(200).json({ status: 200, establecimientos: establecimiento, message: 'Establecimiento aprobado correctamente' });
+    }
+    catch (e) {
+        res.status(500).json({ status: 500, error: e, message: 'Error al aprobar el establecimiento' });
+    }
+});
 router.put('/:id', fields_1.premisessValidation, fields_1.checkResult, async (req, res) => {
     try {
         const establecimiento = await premisses_1.updatePremisses({

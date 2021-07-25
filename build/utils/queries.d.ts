@@ -11,6 +11,7 @@ export declare const queriesPremisess: {
     INSERT_PREMISESS: string;
     UPDATE_PREMISSES: string;
     SET_IMAGE: string;
+    SET_APPROVED: string;
     DELETE_PREMISSE: string;
 };
 export declare const queriesProduct: {

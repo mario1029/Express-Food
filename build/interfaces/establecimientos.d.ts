@@ -5,5 +5,7 @@ export interface establecimiento {
     correoE: string;
     numeroContacto?: string;
     urlPagina?: string;
+    urlFoto?: string;
+    aprobado?: boolean;
 }
 //# sourceMappingURL=establecimientos.d.ts.map

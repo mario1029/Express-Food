@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { premisessValidation, checkResult } from '@validations/fields';
-import { deletePremisses, getPremisess, getPremisessByAddress, insertPremisess, updatePremisses } from '@helpers/premisses';
+import { approvedPremisses, deletePremisses, getPremisess, getPremisessByAddress, insertPremisess, updatePremisses } from '@helpers/premisses';
 import { establecimiento } from '@interfaces/establecimientos';
 
 const router = Router();
@@ -34,6 +34,15 @@ router.post('/new', premisessValidation, checkResult,async(req:any, res)=>{
         res.status(500).json({ status: 500, error: e, message: 'Error al crear el establecimiento' });
     }
 });
+
+router.put('/approved/:id', async(req, res)=>{
+    try {
+        const establecimiento:establecimiento= await approvedPremisses(+req.params.id);
+        res.status(200).json({ status: 200, establecimientos: establecimiento, message: 'Establecimiento aprobado correctamente' });
+    } catch (e) {
+        res.status(500).json({ status: 500, error: e, message: 'Error al aprobar el establecimiento' });
+    }
+})
 
 router.put('/:id', premisessValidation, checkResult, async(req, res)=>{
     try {

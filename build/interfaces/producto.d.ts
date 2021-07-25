@@ -4,5 +4,6 @@ export interface producto {
     descripcion: string;
     precio: number;
     disponible?: boolean;
+    urlfoto?: string;
 }
 //# sourceMappingURL=producto.d.ts.map

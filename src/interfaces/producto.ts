@@ -3,5 +3,6 @@ export interface producto{
     nombre: string,
     descripcion: string
     precio: number,
-    disponible?:boolean
+    disponible?:boolean,
+    urlfoto?:string
 }
