@@ -8,7 +8,7 @@ import { LocalStrategy } from '@utils/strategies';
 
 const app = express();
 
-app.use('/views', express.static(__dirname + '/public'));
+app.use('/views', express.static(__dirname + '/uploads'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(

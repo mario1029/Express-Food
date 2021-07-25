@@ -3,14 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProducto = exports.setAvailability = exports.updateProduct = exports.insertProduct = exports.getProductPremisses = exports.getProduct = void 0;
+exports.deleteProducto = exports.setAvailability = exports.updateProduct = exports.insertProduct = exports.getProductFilter = exports.getProduct = void 0;
 const pool_1 = __importDefault(require("@utils/pool"));
 const queries_1 = require("@utils/queries");
 const pool = pool_1.default.getInstance();
-const getProduct = async () => {
+const getProduct = async (idEstablecimieto) => {
     const client = await pool.connect();
     try {
-        const response = (await client.query(queries_1.queriesProduct.GET_PRODUCT)).rows;
+        const response = (await client.query(queries_1.queriesProduct.GET_PRODUCT_BY_PREMISESS, [idEstablecimieto])).rows;
         const product = response.map((rows) => {
             return {
                 id_producto: rows.id_producto,
@@ -31,10 +31,10 @@ const getProduct = async () => {
     }
 };
 exports.getProduct = getProduct;
-const getProductPremisses = async (idEstablecimiento) => {
+const getProductFilter = async (idEstablecimiento) => {
     const client = await pool.connect();
     try {
-        const response = (await client.query(queries_1.queriesProduct.GET_PRODUCT_BY_PREMISESS, [idEstablecimiento])).rows;
+        const response = (await client.query(queries_1.queriesProduct.GET_PRODUCT_BY_PREMISESS_FILTER, [idEstablecimiento])).rows;
         const product = response.map((rows) => {
             return {
                 id_producto: rows.id_producto,
@@ -53,7 +53,7 @@ const getProductPremisses = async (idEstablecimiento) => {
         client.release();
     }
 };
-exports.getProductPremisses = getProductPremisses;
+exports.getProductFilter = getProductFilter;
 const insertProduct = async ({ producto, idEstablecimiento }) => {
     const client = await pool.connect();
     const { nombre, descripcion, precio, disponible } = producto;

@@ -1,22 +1,22 @@
 import { Router } from 'express';
 import { productValidation, updateProductValidation, checkResult } from '@validations/fields';
-import { deleteProducto, getProduct, getProductPremisses, insertProduct, setAvailability, updateProduct } from '@helpers/product';
+import { deleteProducto, getProduct, getProductFilter, insertProduct, setAvailability, updateProduct } from '@helpers/product';
 import { producto } from '@interfaces/producto';
 
 const router = Router();
 
-router.get('/lista',async(req, res)=>{
+router.get('/lista/:idEstabecimirnto',async(req, res)=>{
     try {
-        const producto: producto[]=await getProduct();
+        const producto: producto[]=await getProduct(+req.params.idEstabecimirnto);
         res.status(200).json({ status: 200, productos: producto, message: 'productos encontrados correctamente' });
     } catch (e) {
         res.status(500).json({ status: 500, error: e, message: 'Error al buscar los productos' });
     }
 });
 
-router.get('/lista/:idEstablecimiento', async(req, res)=>{
+router.get('/lista/filtrar/:idEstablecimiento', async(req, res)=>{
     try {
-        const producto: producto[]=await getProductPremisses(+req.params.idEstablecimiento);
+        const producto: producto[]=await getProductFilter(+req.params.idEstablecimiento);
         res.status(200).json({ status: 200, productos: producto, message: 'productos encontrados correctamente' });
     } catch (e) {
         res.status(500).json({ status: 500, error: e, message: 'Error al buscar los productos' });

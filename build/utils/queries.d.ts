@@ -10,13 +10,15 @@ export declare const queriesPremisess: {
     GET_PREMISESS_BY_ADDRESS: string;
     INSERT_PREMISESS: string;
     UPDATE_PREMISSES: string;
+    SET_IMAGE: string;
     DELETE_PREMISSE: string;
 };
 export declare const queriesProduct: {
-    GET_PRODUCT: string;
     GET_PRODUCT_BY_PREMISESS: string;
+    GET_PRODUCT_BY_PREMISESS_FILTER: string;
     INSERT_PRODUCT: string;
     UPDATE_PRODUCT: string;
+    SET_IMAGE: string;
     SET_AVAILABILITY: string;
     DELETE_PRODUCT: string;
 };

@@ -4,18 +4,18 @@ const express_1 = require("express");
 const fields_1 = require("@validations/fields");
 const product_1 = require("@helpers/product");
 const router = express_1.Router();
-router.get('/lista', async (req, res) => {
+router.get('/lista/:idEstabecimirnto', async (req, res) => {
     try {
-        const producto = await product_1.getProduct();
+        const producto = await product_1.getProduct(+req.params.idEstabecimirnto);
         res.status(200).json({ status: 200, productos: producto, message: 'productos encontrados correctamente' });
     }
     catch (e) {
         res.status(500).json({ status: 500, error: e, message: 'Error al buscar los productos' });
     }
 });
-router.get('/lista/:idEstablecimiento', async (req, res) => {
+router.get('/lista/filtrar/:idEstablecimiento', async (req, res) => {
     try {
-        const producto = await product_1.getProductPremisses(+req.params.idEstablecimiento);
+        const producto = await product_1.getProductFilter(+req.params.idEstablecimiento);
         res.status(200).json({ status: 200, productos: producto, message: 'productos encontrados correctamente' });
     }
     catch (e) {

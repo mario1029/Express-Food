@@ -9,7 +9,7 @@ CREATE TABLE "usuario" (
 
 CREATE TABLE "conductor" (
   "id_conductor" integer PRIMARY KEY,
-  "urlfoto" varchar,
+  "urlFoto" varchar,
   "nombre" varchar,
   "numero" varchar,
   "direccion" varchar,
@@ -26,6 +26,7 @@ CREATE TABLE "establecimiento" (
   "correoe" varchar,
   "numerocontacto" varchar,
   "urlpagina" varchar,
+  "urlfoto" varchar,
   "correo" varchar
 );
 
@@ -35,6 +36,7 @@ CREATE TABLE "producto" (
   "descripcion" varchar,
   "precio" numeric,
   "disponible" boolean,
+  "urlfoto" varchar,
   "id_establecimiento" integer
 );
 

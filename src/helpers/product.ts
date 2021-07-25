@@ -4,10 +4,10 @@ import { producto } from '@interfaces/producto';
 
 const pool = Pool.getInstance();
 
-export const getProduct= async(): Promise<producto[]>=>{
+export const getProduct= async(idEstablecimieto:number): Promise<producto[]>=>{
     const client = await pool.connect();
     try {
-        const response = (await client.query(queriesProduct.GET_PRODUCT)).rows;
+        const response = (await client.query(queriesProduct.GET_PRODUCT_BY_PREMISESS, [idEstablecimieto])).rows;
         const product: producto[] = response.map((rows)=>{
             return {
                 id_producto: rows.id_producto,
@@ -26,10 +26,10 @@ export const getProduct= async(): Promise<producto[]>=>{
     }
 };
 
-export const getProductPremisses= async(idEstablecimiento:number): Promise<producto[]>=>{
+export const getProductFilter= async(idEstablecimiento:number): Promise<producto[]>=>{
     const client = await pool.connect();
     try {
-        const response = (await client.query(queriesProduct.GET_PRODUCT_BY_PREMISESS,[idEstablecimiento])).rows;
+        const response = (await client.query(queriesProduct.GET_PRODUCT_BY_PREMISESS_FILTER,[idEstablecimiento])).rows;
         const product: producto[] = response.map((rows)=>{
             return {
                 id_producto: rows.id_producto,

@@ -11,7 +11,7 @@ const express_session_1 = __importDefault(require("express-session"));
 const passport_1 = __importDefault(require("passport"));
 const strategies_1 = require("@utils/strategies");
 const app = express_1.default();
-app.use('/views', express_1.default.static(__dirname + '/public'));
+app.use('/views', express_1.default.static(__dirname + '/uploads'));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use(express_session_1.default({

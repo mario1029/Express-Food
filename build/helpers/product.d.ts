@@ -1,6 +1,6 @@
 import { producto } from '@interfaces/producto';
-export declare const getProduct: () => Promise<producto[]>;
-export declare const getProductPremisses: (idEstablecimiento: number) => Promise<producto[]>;
+export declare const getProduct: (idEstablecimieto: number) => Promise<producto[]>;
+export declare const getProductFilter: (idEstablecimiento: number) => Promise<producto[]>;
 export declare const insertProduct: ({ producto, idEstablecimiento }: {
     producto: producto;
     idEstablecimiento: number;
