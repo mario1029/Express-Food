@@ -1,48 +1,30 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
-export default function App() {
+export default function Login() {
+  
+  const submit = ()=>{
+
+  }
+  
   return (
     <View style={styles.container}>
         <View>
-            <Text style={styles.title}>Registro</Text>
+            <Text style={styles.title}>Inicio de Sesion</Text>
         </View>
-        <View>
+        <View >
             <Text style={styles.text}>Correo</Text>
             <TextInput
                 style={styles.input}
-                placeholder="ingrese un correo"
+                placeholder="algo@gmail.com"
                 autoCompleteType="email"
                 keyboardType="email-address"
-                textAlign="center"
-            />
-            <Text style={styles.text}>Nombre</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="ingrese su nombre"
-                autoCompleteType="name"
-                keyboardType="default"
-                textAlign="center"
-            />
-            <Text style={styles.text}>Numero (Opcional)</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="ingrese su Numero"
-                autoCompleteType="tel"
-                keyboardType="numeric"
-                textAlign="center"
-            />
-            <Text style={styles.text}>Direccion (Opcional)</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="ingrese su direccion"
-                keyboardType="default"
                 textAlign="center"
             />
             <Text style={styles.text} >Contraseña</Text>
             <TextInput
                 style={styles.input}
-                placeholder="ingrese su Contraseña"
+                placeholder="**********"
                 autoCompleteType="password"
                 keyboardType="default"
                 textAlign="center"
@@ -53,7 +35,7 @@ export default function App() {
                 //onPress={submit}
                 style={styles.button}
                 >
-                <Text style={styles.buttonText}>Enviar</Text>
+                <Text style={styles.buttonText}>Iniciar Sesion</Text>
             </TouchableOpacity>
         </View>
       <StatusBar style="auto" />
@@ -62,12 +44,6 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -109,6 +85,7 @@ const styles = StyleSheet.create({
     },
     input: {
       height: 40,
+      width:250,
       borderWidth: 2,
       backgroundColor: '#ffffff',
       fontSize: 20,

@@ -79,4 +79,12 @@ export const colors = {
         justifyContent: 'center',
         padding: 50,
       },
+      imageProduct:{
+        width: "100%",
+        height: 125,
+      },
+      list: {
+        width: '100%',
+        flex:2
+      }
   });

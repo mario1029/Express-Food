@@ -76,8 +76,17 @@ export function DrawerContent(props:any){
                                 name="account-outline"
                                 color={color}
                                 size={size} />}
-                            label="Profile"
-                            onPress={()=>props.navigation.navigate('Profile')}
+                            label="Login"
+                            onPress={()=>props.navigation.navigate('Login')}
+                        />
+                        <DrawerItem
+                            icon={({color, size})=>
+                                <Icon
+                                    name="cash-marker"
+                                    color={color}
+                                    size={size} />}
+                                label="MyProducts"
+                                onPress={()=>props.navigation.navigate('MyProducts')}
                         />
                         <DrawerItem
                             icon={({color, size})=>
@@ -87,6 +96,24 @@ export function DrawerContent(props:any){
                                     size={size} />}
                                 label="Products"
                                 onPress={()=>props.navigation.navigate('Products')}
+                        />
+                        <DrawerItem
+                            icon={({color, size})=>
+                                <Icon
+                                    name="cash-marker"
+                                    color={color}
+                                    size={size} />}
+                                label="AddProducts"
+                                onPress={()=>props.navigation.navigate('AddProduct')}
+                        />
+                        <DrawerItem
+                            icon={({color, size})=>
+                                <Icon
+                                    name="cash-marker"
+                                    color={color}
+                                    size={size} />}
+                                label="EditProducts"
+                                onPress={()=>props.navigation.navigate('AddProduct')}
                         />
                          <DrawerItem
                             icon={({color, size})=>
