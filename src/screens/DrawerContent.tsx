@@ -88,6 +88,42 @@ export function DrawerContent(props:any){
                                 label="Products"
                                 onPress={()=>props.navigation.navigate('Products')}
                         />
+                         <DrawerItem
+                            icon={({color, size})=>
+                                <Icon
+                                    name="cash-marker"
+                                    color={color}
+                                    size={size} />}
+                                label="Register"
+                                onPress={()=>props.navigation.navigate('Register')}
+                        />
+                         <DrawerItem
+                            icon={({color, size})=>
+                                <Icon
+                                    name="store-outline"
+                                    color={color}
+                                    size={size} />}
+                                label="Premisess"
+                                onPress={()=>props.navigation.navigate('Premisess')}
+                        />
+                        <DrawerItem
+                            icon={({color, size})=>
+                                <Icon
+                                    name="plus-box-multiple"
+                                    color={color}
+                                    size={size} />}
+                                label="addPremisess"
+                                onPress={()=>props.navigation.navigate('addPremisess')}
+                        />
+                          <DrawerItem
+                            icon={({color, size})=>
+                                <Icon
+                                    name="storefront-outline"
+                                    color={color}
+                                    size={size} />}
+                                label="myPremisess"
+                                onPress={()=>props.navigation.navigate('myPremisess')}
+                        />
                         <DrawerItem
                             icon={({color, size})=>
                                 <Icon
