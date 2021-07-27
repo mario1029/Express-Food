@@ -1,7 +1,95 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import React, {useEffect} from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import {insertPremisess} from '../../utils/premisess.comm'
+import { filePremisess } from '../../utils/file.comm';
+
 const addPremisess= ({navigation}:any)=> {
+    const [nombre, setNombre] = React.useState("");
+    const [urlPagina, setUrl] = React.useState("");
+    const [email, setEmail] = React.useState("");
+    const [numero, setNumero] = React.useState("");
+    const [direccion, setDireccion] = React.useState("");
+    const [image, setImage] = React.useState("");
+    const [imagename, setImageName] = React.useState("");
+    const [type, setImageType] = React.useState("");
+    const [data, setData]= React.useState(Array)
+
+    const submit = async ()=>{
+        console.log('Se envio un establecimieno con',nombre, direccion, email)
+        const result= await insertPremisess({
+            nombre:nombre,
+            correoE:email,
+            numeroContacto:numero,
+            direccion:direccion,
+            urlPagina:urlPagina,
+            urlFoto:''
+        });
+        console.log('aqui  ', image)
+        if(result.status==200){
+            Alert.alert("Notificacion",result.message)
+            console.log(result);
+            // if(image){
+            //     const res= await filePremisess({
+            //         id:result.establecimientos.id_establecimientos,
+            //         data:data
+            //     })
+            //     console.log(image)
+            //     if(res.status==200){
+            //       Alert.alert("Imagen guardada")
+            //     }
+            // }
+            setNombre('');
+            setDireccion('');
+            setEmail('');
+            setNumero('');
+            setUrl('');
+            setImage('')
+            navigation.navigate('myPremisess');
+        }else if(result.status==400){
+            Alert.alert("Error en los datos", result.error.msg)
+        }else if(result.status==500){
+            Alert.alert(result.message, "Ocurrio un error")
+        }
+
+    }
+
+    
+
+    const pickImage = async () => {
+        let result = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    
+        if(result.granted === false){
+          alert('Permisos de Camara requeridos');
+          return;
+        }
+    
+        const pickerResult = await ImagePicker.launchImageLibraryAsync();
+        
+        if(pickerResult.cancelled === true){
+          return;
+        }
+    
+        if (!pickerResult.cancelled) {
+            setImage(pickerResult.uri)
+            let data= [];
+            let localUri = pickerResult.uri;
+            let filename = localUri.split('/').pop()!;
+            // Infer the type of the image
+            let match = /\.(\w+)$/.exec(filename);
+            let type = match ? `image/${match[1]}` : `image`;
+            data.push('images', { uri:localUri, name:filename, type:type,});
+            console.log(data)
+          setData(data);
+        //   setImage(pickerResult.uri);
+        //   setImageName(nombre);
+        //   setImageType(fileType)
+          console.log('Hola:',image);
+        }
+    };
+
+
   return (
     <View style={styles.container}>
         <View>
@@ -11,6 +99,8 @@ const addPremisess= ({navigation}:any)=> {
             <Text style={styles.text}>Nombre</Text>
             <TextInput
                 style={styles.input}
+                onChangeText={setNombre}
+                value={nombre}
                 placeholder="ingrese un nombre para el establecimiento"
                 autoCompleteType="name"
                 keyboardType="default"
@@ -19,6 +109,8 @@ const addPremisess= ({navigation}:any)=> {
             <Text style={styles.text}>Correo</Text>
             <TextInput
                 style={styles.input}
+                onChangeText={setEmail}
+                value={email}
                 placeholder="ingrese un correo"
                 autoCompleteType="email"
                 keyboardType="email-address"
@@ -27,6 +119,8 @@ const addPremisess= ({navigation}:any)=> {
             <Text style={styles.text}>Direccion</Text>
             <TextInput
                 style={styles.input}
+                onChangeText={setDireccion}
+                value={direccion}
                 placeholder="ingrese la direccion"
                 keyboardType="default"
                 textAlign="center"
@@ -34,6 +128,8 @@ const addPremisess= ({navigation}:any)=> {
             <Text style={styles.text}>Numero (Opcional)</Text>
             <TextInput
                 style={styles.input}
+                onChangeText={setNumero}
+                value={numero}
                 placeholder="ingrese un Numero para contactarlos"
                 autoCompleteType="tel"
                 keyboardType="numeric"
@@ -42,17 +138,39 @@ const addPremisess= ({navigation}:any)=> {
             <Text style={styles.text} >Pagina web (Opcional)</Text>
             <TextInput
                 style={styles.input}
+                onChangeText={setUrl}
+                value={urlPagina}
                 placeholder="ingrese la url de su pagina web"
                 autoCompleteType="password"
                 keyboardType="default"
                 textAlign="center"
             />
         </View>
-        {/* fotos */}
+        <View>
+                        {image !== '' ?
+                            (<>
+                            <View style={styles.conteinerTop}>
+                                <TouchableOpacity onPress={pickImage}>
+                                    <Image
+                                        source={{ uri: image !== '' ? image : 'https://picsum.photos/id/237/200/300'}}
+                                        style={styles.logo}
+                                    />
+                                </TouchableOpacity>
+                            </View></>)
+                        : (<>
+                            <View style={styles.conteinerTop}>
+                                <TouchableOpacity onPress={pickImage} style={styles.button}>
+                                    <Text style={styles.buttonText}>Set image</Text>
+                                </TouchableOpacity>
+                            </View></>)
+                        }
+                        </View>
         <View >
             <TouchableOpacity 
                 //onPress={submit}
-                onPress={()=>{navigation.navigate('myPremisess')}}
+                onPress={()=>{
+                    submit()
+                }}
                 style={styles.button}
                 >
                 <Text style={styles.buttonText}>Enviar Solicitud</Text>
@@ -117,7 +235,6 @@ const styles = StyleSheet.create({
       borderRadius: 15,
     },
     conteinerTop:{
-      backgroundColor: '#AD20A5',
       alignItems: 'center',
       justifyContent: 'center',
     },

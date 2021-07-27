@@ -1,7 +1,83 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
-const editPremisess= ({navigation}:any)=> {
+import React, {useEffect} from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { establecimiento } from '../../interfaces/establecimientos';
+import { getPremissesByID, updatePremisess } from '../../utils/premisess.comm';
+
+const editPremisess= ({navigation, route}:any)=> {
+    const [nombre, setNombre] = React.useState("");
+    const [urlPagina, setUrl] = React.useState("");
+    const [email, setEmail] = React.useState("");
+    const [numero, setNumero] = React.useState("");
+    const [direccion, setDireccion] = React.useState("");
+    const [image, setImage] = React.useState("");
+    const [refresh, setRefresh]= React.useState(false);
+
+    const detailPremisess = async ()=>{
+        console.log(route.params.id)
+        const data:establecimiento = await getPremissesByID(route.params.id);
+        setNombre(data.nombre)
+        setEmail(data.correoE)
+        setDireccion(data.direccion)
+        setNumero(data.numeroContacto)
+        setUrl(data.urlPagina)
+        setRefresh(false)
+     //   setLoading(false);
+        
+    }
+
+    const onRefresh= ()=>{
+        // setLoading(true)
+        setRefresh(true);
+         detailPremisess(); 
+       }
+
+    useEffect(()=>{
+       //Aqui se guardan los valores de route dentro de las variables
+            detailPremisess()
+    }, [])
+
+    const submit = async ()=>{
+        console.log('Se envio un establecimieno con',nombre, direccion, email, route.params.id)
+        const result= await updatePremisess({
+            establecimiento:{
+                nombre:nombre,
+                correoE:email,
+                numeroContacto:numero,
+                direccion:direccion,
+                urlPagina:urlPagina,
+                urlFoto:''
+        },id:route.params.id
+        });
+        console.log(result)
+        if(result.status==200){
+            Alert.alert("Notificacion",result.message)
+            console.log(result);
+            // if(image){
+            //     const res= await filePremisess({
+            //         id:result.establecimientos.id_establecimientos,
+            //         data:data
+            //     })
+            //     console.log(image)
+            //     if(res.status==200){
+            //       Alert.alert("Imagen guardada")
+            //     }
+            // }
+            setNombre('');
+            setDireccion('');
+            setEmail('');
+            setNumero('');
+            setUrl('');
+            setImage('')
+            navigation.navigate('myPremisess');
+        }else if(result.status==400){
+            Alert.alert("Error en los datos", result.error.msg)
+        }else if(result.status==500){
+            Alert.alert(result.message, "Ocurrio un error")
+        }
+
+    }
+
   return (
     <View style={styles.container}>
         <View>
@@ -11,6 +87,8 @@ const editPremisess= ({navigation}:any)=> {
             <Text style={styles.text}>Nombre</Text>
             <TextInput
                 style={styles.input}
+                onChangeText={setNombre}
+                value={nombre}
                 placeholder="ingrese un nombre para el establecimiento"
                 autoCompleteType="name"
                 keyboardType="default"
@@ -19,6 +97,8 @@ const editPremisess= ({navigation}:any)=> {
             <Text style={styles.text}>Correo</Text>
             <TextInput
                 style={styles.input}
+                onChangeText={setEmail}
+                value={email}
                 placeholder="ingrese un correo"
                 autoCompleteType="email"
                 keyboardType="email-address"
@@ -27,6 +107,8 @@ const editPremisess= ({navigation}:any)=> {
             <Text style={styles.text}>Direccion</Text>
             <TextInput
                 style={styles.input}
+                onChangeText={setDireccion}
+                value={direccion}
                 placeholder="ingrese la direccion"
                 keyboardType="default"
                 textAlign="center"
@@ -34,6 +116,8 @@ const editPremisess= ({navigation}:any)=> {
             <Text style={styles.text}>Numero (Opcional)</Text>
             <TextInput
                 style={styles.input}
+                onChangeText={setNumero}
+                value={numero}
                 placeholder="ingrese un Numero para contactarlos"
                 autoCompleteType="tel"
                 keyboardType="numeric"
@@ -42,6 +126,8 @@ const editPremisess= ({navigation}:any)=> {
             <Text style={styles.text} >Pagina web (Opcional)</Text>
             <TextInput
                 style={styles.input}
+                onChangeText={setUrl}
+                value={urlPagina}
                 placeholder="ingrese la url de su pagina web"
                 keyboardType="default"
                 textAlign="center"
@@ -50,8 +136,7 @@ const editPremisess= ({navigation}:any)=> {
         {/* fotos */}
         <View >
             <TouchableOpacity 
-                //onPress={submit}
-                onPress={()=>{navigation.navigate('myPremisess')}}
+                onPress={submit}
                 style={styles.button}
                 >
                 <Text style={styles.buttonText}>Actualizar</Text>

@@ -1,14 +1,31 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, Image, Pressable,FlatList, TextInput, View } from 'react-native';
+import React, {useEffect} from 'react';
+import { StyleSheet, Text, TouchableOpacity,RefreshControl, Image, Pressable,FlatList, TextInput, View } from 'react-native';
 
 import {Card } from 'react-native-elements';
+import { producto } from '../../interfaces/producto';
+import { getProduct } from '../../utils/product.comm';
 
-export default function Products({navigation}:any) {
-  const addProduct = ()=>{
+export default function Products({navigation, route}:any) {
+ 
+  const [productos,setProductos] = React.useState([{nombre:'', descripcion:'', precio:0, urlfoto:''}]);
+  const [refresh, setRefresh]= React.useState(false);
 
-  }
+  const loadProducts = async ()=>{
+    const products:producto[] = await getProduct(route.params.id);
+    setProductos(products);
+    setRefresh(false);    
+}
 
+const onRefresh= ()=>{
+  // setLoading(true)
+  setRefresh(true);
+  loadProducts(); 
+ }
+
+ useEffect(()=>{
+  loadProducts(); 
+}, [])
   const Item = ( {nombre, descripcion, urifoto , precio}:any ) => (
 
       <View>
@@ -16,11 +33,20 @@ export default function Products({navigation}:any) {
             <Card.Divider/>
               <Card.Title>{nombre}</Card.Title>
             <Card.Divider/>
-            <Image
-              style={styles.image}
-              resizeMode="center"
-              source={{ uri: urifoto }}
-            />
+            {!urifoto?(<>
+                    <Image
+            style={{ width: "100%", height: 125 }}
+            resizeMode="cover"
+            source={require('../../assets/productos.jpg')}
+          />
+                            </>):
+                            (<>
+                                <Image
+                        style={{ width: "100%", height: 125 }}
+                        resizeMode="cover"
+                        source={{uri:urifoto}}
+                      />
+                                        </>)}
             <Card.Divider/>
             <Text>Precio: {precio}$</Text>
             <Text>Descripcion: {descripcion}</Text>
@@ -45,29 +71,6 @@ export default function Products({navigation}:any) {
       />    
     );
 
-
-    const data= [
-      {
-          nombre:'Hambuerguesa 1',
-          descripcion:'tiene queso',
-          precio:110.3,
-          urifoto:'https://www.hogar.mapfre.es/media/2018/09/hamburguesa-sencilla-1280x720.jpg'
-      },
-      {
-        nombre:'Sopa 1',
-        descripcion:'tiene tomate',
-        precio:150.3,
-        urifoto:'https://www.hogar.mapfre.es/media/2018/09/hamburguesa-sencilla-1280x720.jpg'
-      },
-      {
-        nombre:'Ramen 1',
-        descripcion:'tiene picante',
-        precio:10.3,
-        urifoto:'https://www.hogar.mapfre.es/media/2018/09/hamburguesa-sencilla-1280x720.jpg'
-      },
-    ];
-  
-
   return (
       <View style={styles.container}>
         <View style={styles.containerTitle}>
@@ -84,7 +87,8 @@ export default function Products({navigation}:any) {
       </View>
       <View style={styles.list}>
         <FlatList
-        data={data}
+        refreshControl={<RefreshControl refreshing={refresh} onRefresh={onRefresh} />}
+        data={productos}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         />

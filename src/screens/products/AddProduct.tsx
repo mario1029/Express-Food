@@ -1,10 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import * as ImagePicker from 'expo-image-picker';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image} from 'react-native';
-export default function AddProduct({navigation}:any) {
-    const [image, setImage] = React.useState("");
+import { StyleSheet, Text, View,Alert, TextInput, TouchableOpacity, Image} from 'react-native';
+import { insertProduct } from '../../utils/product.comm';
 
+export default function AddProduct({navigation, route}:any) {
+    const [image, setImage] = React.useState("");
+    const [nombre, setNombre] = React.useState("");
+    const [descripcion, setDescripcion] = React.useState("");
+    const [precio, setPrecio] = React.useState("");
 
   const pickImage = async () => {
     let result = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -26,9 +30,32 @@ export default function AddProduct({navigation}:any) {
     }
   };    
 
-    const submit = ()=>{
-        console.log("saliendo")
-        navigation.navigate('Products');
+    const submit = async ()=>{
+      const result= await insertProduct({
+        product:{
+          nombre:nombre,
+          descripcion:descripcion,
+          precio:+precio,
+          urlfoto:'',
+          disponible:true
+        },id:route.params.id
+      })
+      if(result.status==304){
+        Alert.alert("Notificacion", result.response);
+      }else if(result.status==400){
+          Alert.alert("Error de credenciales", result.error.msg)
+      }else if(result.status==200){
+          //await storeData(usuario);
+          Alert.alert("Producto Agregado","Produto agregado existosamente");
+          navigation.navigate('Home');
+          console.log(result);
+          setNombre('');
+          setDescripcion('');
+          setPrecio('');
+          console.log("saliendo")
+          navigation.navigate('MyProducts',{id:route.params.id});
+      }
+      
     }
   
   return (
@@ -40,6 +67,8 @@ export default function AddProduct({navigation}:any) {
             <Text style={styles.text}>Nombre</Text>
             <TextInput
                 style={styles.input}
+                onChangeText={setNombre}
+                value={nombre}
                 placeholder="Hamburguesa"
                 autoCompleteType="off"
                 keyboardType="default"
@@ -48,6 +77,8 @@ export default function AddProduct({navigation}:any) {
             <Text style={styles.text} >Descripcion</Text>
             <TextInput
                 style={styles.inputDescrip}
+                onChangeText={setDescripcion}
+                value={descripcion}
                 placeholder="Contiene lecha, tomate, mayonesa y carne molida"
                 autoCompleteType="off"
                 keyboardType="default"
@@ -75,6 +106,8 @@ export default function AddProduct({navigation}:any) {
             <Text style={styles.text} >Precio:</Text>
             <TextInput
                 style={styles.input}
+                onChangeText={setPrecio}
+                value={precio}
                 placeholder="1.41$"
                 autoCompleteType="off"
                 keyboardType="number-pad"

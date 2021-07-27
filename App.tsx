@@ -25,7 +25,7 @@ const Drawer = createDrawerNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Drawer.Navigator drawerContent={props => <DrawerContent {...props}/>}>
+      <Drawer.Navigator initialRouteName="Login" drawerContent={props => <DrawerContent {...props}/>}>
         <Drawer.Screen name="Home" component={Home}/>
         <Drawer.Screen name="Login" component={Login}/>
         <Drawer.Screen name="Register" component={Register}/>

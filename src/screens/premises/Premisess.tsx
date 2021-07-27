@@ -1,54 +1,50 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable, FlatList, Image } from 'react-native';
+import React, {useEffect} from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable, FlatList, Image, RefreshControl } from 'react-native';
 import {Card } from 'react-native-elements'
+import { establecimiento } from '../../interfaces/establecimientos';
+import { getPremisses} from '../../utils/premisess.comm';
 
 const Premisess= ({navigation}:any)=>{
 
-    const data= [
-    {
-        titulo:'lobo 1',
-        image:'https://th.bing.com/th/id/OIP.pD9m7CfeyptsBmHPkpbq9AHaD2?pid=ImgDet&rs=1'
-    },
-    {
-        titulo:'lobo 2',
-        image:'https://th.bing.com/th/id/OIP.pD9m7CfeyptsBmHPkpbq9AHaD2?pid=ImgDet&rs=1'
-    },
-    {
-        titulo:'lobo 3',
-        image:'https://th.bing.com/th/id/OIP.pD9m7CfeyptsBmHPkpbq9AHaD2?pid=ImgDet&rs=1'
-    },
-    {
-        titulo:'lobo 3',
-        image:'https://th.bing.com/th/id/OIP.pD9m7CfeyptsBmHPkpbq9AHaD2?pid=ImgDet&rs=1'
-    }, {
-        titulo:'lobo 3',
-        image:'https://th.bing.com/th/id/OIP.pD9m7CfeyptsBmHPkpbq9AHaD2?pid=ImgDet&rs=1'
-    }, {
-        titulo:'lobo 3',
-        image:'https://th.bing.com/th/id/OIP.pD9m7CfeyptsBmHPkpbq9AHaD2?pid=ImgDet&rs=1'
-    },
-    {
-        titulo:'lobo 3',
-        image:'https://th.bing.com/th/id/OIP.pD9m7CfeyptsBmHPkpbq9AHaD2?pid=ImgDet&rs=1'
-    }, {
-        titulo:'lobo 3',
-        image:'https://th.bing.com/th/id/OIP.pD9m7CfeyptsBmHPkpbq9AHaD2?pid=ImgDet&rs=1'
-    }, 
-    ];
+    const [establecimientos, setEstablecimientos] = React.useState([{nombre:'', direccion:'', correoE:'', numeroContacto:'', urlPagina:'', urlFoto:''}]);
+    const [refresh, setRefresh]= React.useState(false);
+
+    const loadPremisess = async ()=>{
+        const premisess:establecimiento[] = await getPremisses();
+        setEstablecimientos(premisess)
+        setRefresh(false);
+     //   setLoading(false);
+        
+    }
+
+    const onRefresh= ()=>{
+        // setLoading(true)
+        setRefresh(true);
+        loadPremisess(); 
+    }
 
     const Item = ( {title, image, id, onRefresh}:any ) => (
         <Pressable
-        onPress={()=>{navigation.navigate('Products')}}
+        onPress={()=>{navigation.navigate('Products', {id})}}
         //onLongPress={()=>{console.log('funciona')}}
         >
            <View>
               <Card>
-              <Image
-            style={styles.image}
+              {!image?(<>
+                    <Image
+            style={{ width: "100%", height: 125 }}
             resizeMode="cover"
-            source={{ uri: image }}
+            source={require('../../assets/negocio.jpg')}
           />
+                            </>):
+                            (<>
+                                <Image
+                        style={{ width: "100%", height: 125 }}
+                        resizeMode="cover"
+                        source={{uri:image}}
+                      />
+                                        </>)}
                 <Card.Divider/>
                 <Card.Title>{title}</Card.Title>
                 <Card.Divider/>
@@ -57,12 +53,25 @@ const Premisess= ({navigation}:any)=>{
         </Pressable>
         );
       
+        useEffect(()=>{
+            loadPremisess();
+            //   const getData = async () => {
+            //     try {
+            //       const jsonValue = await AsyncStorage.getItem('login')
+            //       if(jsonValue==null){
+            //         navigation.navigate('Login')
+            //       }
+            //     } catch(e) {
+            //       // error reading value
+            //     }
+            //   }
+            //   getData();        
+        }, [])
+
         const renderItem = ({item}:any ) => (
-          <Item title={item.titulo} image={item.image} />    
+          <Item title={item.nombre} image={item.urlFoto} id={item.id_establecimiento} />    
         );
     
-    console.log(data)
-
     return(
         <View style={styles.container}>
             <View style={styles.containerTitle}>
@@ -79,7 +88,8 @@ const Premisess= ({navigation}:any)=>{
             </View>
             <View style={styles.list}>
             <FlatList
-            data={data}
+            refreshControl={<RefreshControl refreshing={refresh} onRefresh={onRefresh} />}
+            data={establecimientos}
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
             />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ViewBase, StyleSheet, View } from 'react-native';
+import { ViewBase, StyleSheet, View, Alert } from 'react-native';
 import { 
     DrawerContentScrollView,
     DrawerItem
@@ -17,6 +17,7 @@ import {
 } from 'react-native-paper';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { logout } from '../utils/user.comm';
 
 export function DrawerContent(props:any){
 
@@ -69,60 +70,6 @@ export function DrawerContent(props:any){
                                 size={size} />}
                             label="Home"
                             onPress={()=>props.navigation.navigate('Home')}
-                        />
-                        <DrawerItem
-                        icon={({color, size})=>
-                            <Icon
-                                name="account-outline"
-                                color={color}
-                                size={size} />}
-                            label="Login"
-                            onPress={()=>props.navigation.navigate('Login')}
-                        />
-                        <DrawerItem
-                            icon={({color, size})=>
-                                <Icon
-                                    name="cash-marker"
-                                    color={color}
-                                    size={size} />}
-                                label="MyProducts"
-                                onPress={()=>props.navigation.navigate('MyProducts')}
-                        />
-                        <DrawerItem
-                            icon={({color, size})=>
-                                <Icon
-                                    name="cash-marker"
-                                    color={color}
-                                    size={size} />}
-                                label="Products"
-                                onPress={()=>props.navigation.navigate('Products')}
-                        />
-                        <DrawerItem
-                            icon={({color, size})=>
-                                <Icon
-                                    name="cash-marker"
-                                    color={color}
-                                    size={size} />}
-                                label="AddProducts"
-                                onPress={()=>props.navigation.navigate('AddProduct')}
-                        />
-                        <DrawerItem
-                            icon={({color, size})=>
-                                <Icon
-                                    name="cash-marker"
-                                    color={color}
-                                    size={size} />}
-                                label="EditProducts"
-                                onPress={()=>props.navigation.navigate('AddProduct')}
-                        />
-                         <DrawerItem
-                            icon={({color, size})=>
-                                <Icon
-                                    name="cash-marker"
-                                    color={color}
-                                    size={size} />}
-                                label="Register"
-                                onPress={()=>props.navigation.navigate('Register')}
                         />
                          <DrawerItem
                             icon={({color, size})=>
@@ -181,7 +128,15 @@ export function DrawerContent(props:any){
                         color={color}
                         size={size} />}
                     label="Logout"
-                    onPress={()=>console.log("Logging out")}
+                    onPress={async ()=>{
+                        const result= await logout();
+                        if(result.status==200){
+                            Alert.alert("Sesion finalizada", result.message)
+                            props.navigation.navigate('Login')
+                        }else{
+                            Alert.alert("Error", result.response)
+                        }
+                    }}
                 />
             </Drawer.Section>
         </View>

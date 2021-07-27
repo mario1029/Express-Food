@@ -1,90 +1,118 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable, SectionList, Image, Alert } from 'react-native';
+import React, {useEffect} from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable, SectionList, Image, Alert, RefreshControl } from 'react-native';
 import {Card } from 'react-native-elements'
+import { establecimiento } from '../../interfaces/establecimientos';
+import { getPremissesByEmail, deletePremisses } from '../../utils/premisess.comm';
 
 const Premisess= ({navigation}:any)=>{
 
-    const data= [
-    {
-        titulo:'lobo 1',
-        image:'https://th.bing.com/th/id/OIP.pD9m7CfeyptsBmHPkpbq9AHaD2?pid=ImgDet&rs=1',
-        aprobado:true,
-    },
-    {
-        titulo:'lobo 2',
-        image:'https://th.bing.com/th/id/OIP.pD9m7CfeyptsBmHPkpbq9AHaD2?pid=ImgDet&rs=1',
-        aprobado:true,
-    },
-    {
-        titulo:'lobo 3',
-        image:'https://th.bing.com/th/id/OIP.pD9m7CfeyptsBmHPkpbq9AHaD2?pid=ImgDet&rs=1',
-        aprobado:true,
-    },
-    {
-        titulo:'lobo 3',
-        image:'https://th.bing.com/th/id/OIP.pD9m7CfeyptsBmHPkpbq9AHaD2?pid=ImgDet&rs=1',
-        aprobado:true,
-    },  
-    ];
+    const [aprobadas, setAprobadas] = React.useState([{nombre:'', direccion:'', correoE:'', numeroContacto:'', urlPagina:'', urlFoto:''}]);
+    const [enEspera, setEspera] = React.useState([{ nombre:'', direccion:'', correoE:'', numeroContacto:'', urlPagina:'', urlFoto:''}]);
+    const [refresh, setRefresh]= React.useState(false);
 
-    const data2=[
-        {
-            titulo:'lobo 3',
-            image:'https://th.bing.com/th/id/OIP.pD9m7CfeyptsBmHPkpbq9AHaD2?pid=ImgDet&rs=1',
-            aprobado:false,
-        },
-         {
-            titulo:'lobo 3',
-            image:'https://th.bing.com/th/id/OIP.pD9m7CfeyptsBmHPkpbq9AHaD2?pid=ImgDet&rs=1',
-            aprobado:false,
-        },
-        {
-            titulo:'lobo 3',
-            image:'https://th.bing.com/th/id/OIP.pD9m7CfeyptsBmHPkpbq9AHaD2?pid=ImgDet&rs=1', 
-            aprobado:false,
-        }, {
-            titulo:'lobo 3',
-            image:'https://th.bing.com/th/id/OIP.pD9m7CfeyptsBmHPkpbq9AHaD2?pid=ImgDet&rs=1', 
-            aprobado:false,
-        },
-    ]
+    const loadPremisess = async ()=>{
+        const premisess:establecimiento[] = await getPremissesByEmail();
+        
+        setAprobadas(premisess.filter((rows)=>{
+          return rows.aprobado==true
+        }));
+        setEspera(premisess.filter((rows)=>{
+          return rows.aprobado==false
+        }));
+        setRefresh(false);
+     //   setLoading(false);
+        
+    }
+  
+    const filterNotes = async (filter:string)=>{
+        const premisess:establecimiento[] = await getPremissesByEmail();
+      setAprobadas(premisess.filter((rows)=>{
+        return rows.aprobado==true
+      }));
+      setEspera(premisess.filter((rows)=>{
+        return rows.aprobado==false
+      }));
+  
+      setRefresh(false);
+   //   setLoading(false);
+      
+  }
+  
+    const search=(titulo:string)=>{
+      setRefresh(true);
+      filterNotes(titulo);
+    }
+  
+    const onRefresh= ()=>{
+      // setLoading(true)
+      setRefresh(true);
+      loadPremisess(); 
+     }
+  
+      useEffect(()=>{
+        loadPremisess();
+        //   const getData = async () => {
+        //     try {
+        //       const jsonValue = await AsyncStorage.getItem('login')
+        //       if(jsonValue==null){
+        //         navigation.navigate('Login')
+        //       }
+        //     } catch(e) {
+        //       // error reading value
+        //     }
+        //   }
+        //   getData();        
+      }, [])
 
-    const onLongPress= (/* id:number */)=>{
+
+    const onLongPress= (id:number)=>{
         Alert.alert(
           "Options",
           "Que desea realizar",
           [
             {
               text: "cancel",
-              onPress: () => console.log("Ask me later pressed"),
+              onPress:()=>{console.log('cancelado')},
               style: "cancel"
             },
             {
                 text: "Editar",
-                onPress: () =>navigation.navigate('editPremisess') //deleteT(id)
+                onPress: () =>navigation.navigate('editPremisess',{id} ) //deleteT(id)
             },
             {
               text: "Borrar",
-              onPress: () =>console.log('borrado') //deleteT(id)
+              onPress: () => {
+                deletePremisses(id)
+                onRefresh()
+              }
             }]
         );}
 
     const Item = ( {title, image, aprobado, id, onRefresh}:any ) => (
         <Pressable
-        onPress={()=>
-            {   if(aprobado) 
-                    navigation.navigate('Products')
-            }}
-        onLongPress={()=>onLongPress()}
+        onPress={()=> navigation.navigate('MyProducts',{id})}
+        onLongPress={()=>{
+            onLongPress(+id)
+            console.log(id)
+        }}
         >
            <View>
               <Card>
-              <Image
+                  {!image?(<>
+                    <Image
             style={{ width: "100%", height: 125 }}
             resizeMode="cover"
-            source={{ uri: image }}
+            source={require('../../assets/negocio.jpg')}
           />
+                            </>):
+                            (<>
+                                <Image
+                        style={{ width: "100%", height: 125 }}
+                        resizeMode="cover"
+                        source={{uri:image}}
+                      />
+                                        </>)}
                 <Card.Divider/>
                 <Card.Title>{title}</Card.Title>
                 <Card.Divider/>
@@ -94,7 +122,7 @@ const Premisess= ({navigation}:any)=>{
         );
       
         const renderItem = ({item}:any ) => (
-          <Item title={item.titulo} image={item.image} aprobado={item.aprobado}/>    
+          <Item title={item.nombre} image={item.urlFoto} aprobado={item.aprobado} id={item.id_establecimiento}/>    
         );
     
     return(
@@ -113,9 +141,10 @@ const Premisess= ({navigation}:any)=>{
             </View>
             <View style={styles.list}>
             <SectionList
+            refreshControl={<RefreshControl refreshing={refresh} onRefresh={onRefresh} />}
             sections={[
-                {title: 'Aprobados', data: data },
-                {title: 'En espera', data: data2},
+                {title: 'Aprobados', data: aprobadas },
+                {title: 'En espera', data: enEspera},
               ]}
               renderItem={renderItem}
               renderSectionHeader={({ section: { title , data} }) => (
