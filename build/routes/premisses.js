@@ -13,10 +13,28 @@ router.get('', async (req, res) => {
         res.status(500).json({ status: 500, error: e, message: 'Error al buscar los establecimientos' });
     }
 });
+router.get('/correo', async (req, res) => {
+    try {
+        const establecimiento = await premisses_1.getPremisessByEmail(req.user.correo);
+        res.status(200).json({ status: 200, establecimientos: establecimiento, message: 'Establecimientos encontrados correctamente' });
+    }
+    catch (e) {
+        res.status(500).json({ status: 500, error: e, message: 'Error al buscar los establecimientos' });
+    }
+});
 router.get('/address/:address', async (req, res) => {
     try {
         const establecimiento = await premisses_1.getPremisessByAddress(req.params.address);
         res.status(200).json({ status: 200, establecimientos: establecimiento, message: 'Establecimientos encontrados correctamente' });
+    }
+    catch (e) {
+        res.status(500).json({ status: 500, error: e, message: 'Error al buscar los establecimientos' });
+    }
+});
+router.get('/detail/:id', async (req, res) => {
+    try {
+        const establecimiento = await premisses_1.getPremisessById(+req.params.id);
+        res.status(200).json({ status: 200, establecimiento: establecimiento, message: 'Establecimientos encontrados correctamente' });
     }
     catch (e) {
         res.status(500).json({ status: 500, error: e, message: 'Error al buscar los establecimientos' });

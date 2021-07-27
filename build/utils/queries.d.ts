@@ -7,6 +7,8 @@ export declare const queries: {
 };
 export declare const queriesPremisess: {
     GET_PREMISESS: string;
+    GET_PREMISESS_BY_EMAIL: string;
+    GET_PREMISESS_BY_ID: string;
     GET_PREMISESS_BY_ADDRESS: string;
     INSERT_PREMISESS: string;
     UPDATE_PREMISSES: string;

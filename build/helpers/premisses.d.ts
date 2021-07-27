@@ -1,5 +1,7 @@
 import { establecimiento } from '@interfaces/establecimientos';
 export declare const getPremisess: () => Promise<establecimiento[]>;
+export declare const getPremisessByEmail: (correo: string) => Promise<establecimiento[]>;
+export declare const getPremisessById: (id: number) => Promise<establecimiento>;
 export declare const getPremisessByAddress: (direccion: string) => Promise<establecimiento[]>;
 export declare const insertPremisess: ({ promisse, correo }: {
     promisse: establecimiento;

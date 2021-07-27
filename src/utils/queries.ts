@@ -7,8 +7,9 @@ export const queries = {
 };
 
 export const queriesPremisess={
-  GET_PREMISESS:`SELECT * FROM establecimiento`,
-  //GET_PREMISESS_NOTIFICATION:``,
+  GET_PREMISESS:`SELECT * FROM establecimiento WHERE aprobado = true`,
+  GET_PREMISESS_BY_EMAIL:`SELECT * FROM establecimiento WHERE correo = $1`,
+  GET_PREMISESS_BY_ID:`SELECT * FROM establecimiento WHERE id_establecimiento = $1`,
   GET_PREMISESS_BY_ADDRESS:`SELECT * FROM establecimiento WHERE  UPPER(direccion) like '%' || UPPER($1) || '%' AND aprobado = true`,
   INSERT_PREMISESS:`INSERT INTO establecimiento (nombre, direccion, correoe, numerocontacto, urlpagina, correo) values ($1, $2, $3, $4, $5, $6) RETURNING *`,
   UPDATE_PREMISSES:`UPDATE establecimiento SET nombre = $1, direccion = $2, correoe = $3, numerocontacto = $4, urlpagina = $5 where id_establecimiento = $6 RETURNING *`,
