@@ -1,0 +1,1 @@
+{"version":3,"file":"producto.d.ts","sourceRoot":"./src/","sources":["interfaces/producto.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,QAAQ;IACrB,WAAW,EAAE,MAAM,CAAC;IACpB,MAAM,EAAE,MAAM,CAAC;IACf,WAAW,EAAE,MAAM,CAAA;IACnB,MAAM,EAAE,MAAM,CAAC;IACf,UAAU,CAAC,EAAC,OAAO,CAAC;IACpB,OAAO,CAAC,EAAC,MAAM,CAAA;CAClB"}
