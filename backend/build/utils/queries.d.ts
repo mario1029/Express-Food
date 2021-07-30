@@ -25,4 +25,13 @@ export declare const queriesProduct: {
     SET_AVAILABILITY: string;
     DELETE_PRODUCT: string;
 };
+export declare const queriesOrder: {
+    CREATE_ORDER: string;
+    GET_ORDER: string;
+    GET_ORDER_DETAIL: string;
+    INSERT_ORDER_DETAIL: string;
+    UPDATE_ORDER_DETAIL: string;
+    DELETE_ORDER_DETAIL: string;
+    DELETE_ORDER: string;
+};
 //# sourceMappingURL=queries.d.ts.map

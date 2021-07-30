@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.queriesProduct = exports.queriesPremisess = exports.queries = void 0;
+exports.queriesOrder = exports.queriesProduct = exports.queriesPremisess = exports.queries = void 0;
 exports.queries = {
     GET_USERS: `SELECT * FROM usuario`,
     GET_USER_BY_EMAIL: `SELECT * FROM usuario WHERE correo = $1`,
@@ -27,5 +27,14 @@ exports.queriesProduct = {
     SET_IMAGE: `UPDATE producto SET urlfoto = $1 WHERE id_producto = $2 RETURNING *`,
     SET_AVAILABILITY: `UPDATE producto SET disponible = not disponible WHERE id_producto = $1 RETURNING *`,
     DELETE_PRODUCT: `DELETE FROM producto WHERE id_producto = $1`
+};
+exports.queriesOrder = {
+    CREATE_ORDER: `INSERT INTO pedido (correo, fecha) values ($1, CURRENT_DATE) RETURNING *`,
+    GET_ORDER: `SELECT * FROM pedido WHERE correo  like  $1`,
+    GET_ORDER_DETAIL: `SELECT nombre, cantidad FROM producto, detalles_pedido WHERE producto.id_producto=detalles_pedido.id_producto  AND  id_pedido  = $1`,
+    INSERT_ORDER_DETAIL: `INSERT INTO detalles_pedido (id_pedido, id_producto, cantidad) VALUES ($1, $2, $3) RETURNING *`,
+    UPDATE_ORDER_DETAIL: `UPDATE detalles_pedido SET cantidad = $1  WHERE id_pedido = $2 AND id_producto  = $3 RETURNING *`,
+    DELETE_ORDER_DETAIL: `DELETE FROM detalles_pedido WHERE id_pedido  = $1  AND id_producto = $2`,
+    DELETE_ORDER: `DELETE FROM pedido WHERE id_pedido  = $1`,
 };
 //# sourceMappingURL=queries.js.map

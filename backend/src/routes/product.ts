@@ -29,9 +29,9 @@ router.post('/new/:idEstablecimiento', productValidation, checkResult, async(req
             producto:req.body,
             idEstablecimiento:+req.params.idEstablecimiento
         });
-        res.status(200).json({ status: 200, producto: producto, message: 'producto encontrado correctamente' });
+        res.status(200).json({ status: 200, producto: producto, message: 'producto creado correctamente' });
     } catch (e) {
-        res.status(500).json({ status: 500, error: e, message: 'Error al buscar el producto' });
+        res.status(500).json({ status: 500, error: e, message: 'Error al crear el producto' });
     }
 });
 

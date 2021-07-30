@@ -27,3 +27,13 @@ export const queriesProduct={
   SET_AVAILABILITY:`UPDATE producto SET disponible = not disponible WHERE id_producto = $1 RETURNING *`,
   DELETE_PRODUCT:`DELETE FROM producto WHERE id_producto = $1`
 }
+
+export const queriesOrder={
+  CREATE_ORDER:`INSERT INTO pedido (correo, fecha) values ($1, CURRENT_DATE) RETURNING *`,
+  GET_ORDER:`SELECT * FROM pedido WHERE correo  like  $1`,
+  GET_ORDER_DETAIL:`SELECT nombre, cantidad FROM producto, detalles_pedido WHERE producto.id_producto=detalles_pedido.id_producto  AND  id_pedido  = $1`,
+  INSERT_ORDER_DETAIL:`INSERT INTO detalles_pedido (id_pedido, id_producto, cantidad) VALUES ($1, $2, $3) RETURNING *`,
+  UPDATE_ORDER_DETAIL:`UPDATE detalles_pedido SET cantidad = $1  WHERE id_pedido = $2 AND id_producto  = $3 RETURNING *`,
+  DELETE_ORDER_DETAIL:`DELETE FROM detalles_pedido WHERE id_pedido  = $1  AND id_producto = $2`,
+  DELETE_ORDER:`DELETE FROM pedido WHERE id_pedido  = $1`,
+}
