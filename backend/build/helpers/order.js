@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteOrder = exports.deleteOrderDetail = exports.updateOrderDetail = exports.insertOrderDetail = exports.getOrderDetail = exports.getOrder = exports.createOrder = void 0;
+exports.montOrder = exports.deleteOrder = exports.deleteOrderDetail = exports.updateOrderDetail = exports.insertOrderDetail = exports.getOrderDetail = exports.getOrder = exports.createOrder = void 0;
 const pool_1 = __importDefault(require("@utils/pool"));
 const queries_1 = require("@utils/queries");
 const pool = pool_1.default.getInstance();
@@ -55,11 +55,14 @@ exports.getOrder = getOrder;
 const getOrderDetail = async (id) => {
     const client = await pool.connect();
     try {
-        const response = (await client.query(queries_1.queriesOrder.GET_ORDER_DETAIL, [id])).rows[0];
-        const order = {
-            producto: response.nombre,
-            cantidad: response.cantidad
-        };
+        const response = (await client.query(queries_1.queriesOrder.GET_ORDER_DETAIL, [id])).rows;
+        const order = response.map((rows) => {
+            return {
+                producto: rows.nombre,
+                cantidad: rows.cantidad,
+                precio: rows.precio
+            };
+        });
         return order;
     }
     catch (e) {
@@ -143,4 +146,22 @@ const deleteOrder = async (idPedido) => {
     }
 };
 exports.deleteOrder = deleteOrder;
+const montOrder = async (idPedido) => {
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        const response = (await client.query(queries_1.queriesOrder.MONT_ORDER, [idPedido])).rows[0];
+        await client.query('COMMIT');
+        return response.sum;
+    }
+    catch (e) {
+        await client.query('CALLBACK');
+        console.log(e);
+        throw e;
+    }
+    finally {
+        client.release();
+    }
+};
+exports.montOrder = montOrder;
 //# sourceMappingURL=order.js.map

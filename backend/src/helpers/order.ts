@@ -45,14 +45,18 @@ export const getOrder= async(correo:string): Promise<pedido[]>=>{
     }
 };
 
-export const getOrderDetail= async(id:number): Promise<detallesPedido>=>{
+export const getOrderDetail= async(id:number): Promise<detallesPedido[]>=>{
     const client = await pool.connect();
     try {
-        const response = (await client.query(queriesOrder.GET_ORDER_DETAIL,[id])).rows[0];
-        const order:detallesPedido={
-            producto:response.nombre,
-            cantidad:response.cantidad
-        }
+        const response = (await client.query(queriesOrder.GET_ORDER_DETAIL,[id])).rows;
+        const order:detallesPedido[]=response.map((rows)=>{
+            return{
+                producto:rows.nombre,
+                cantidad:rows.cantidad,
+                precio:rows.precio
+            }
+           
+        })
         return order;
     } catch (e) {
         console.log(e);
@@ -125,3 +129,19 @@ export const deleteOrder= async(idPedido:number): Promise<boolean>=>{
         client.release();
     }
 };
+
+export const montOrder= async(idPedido:number): Promise<number>=>{
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        const response = (await client.query(queriesOrder.MONT_ORDER,[idPedido])).rows[0];
+        await client.query('COMMIT');
+        return response.sum;
+    } catch (e) {
+        await client.query('CALLBACK');
+        console.log(e);
+        throw e;
+    } finally {
+        client.release();
+    }
+}

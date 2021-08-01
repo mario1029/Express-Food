@@ -12,9 +12,9 @@ export default class Pool {
         connectionString: process.env.DATABASE_URL,
         max: 500,
         min: 100,
-        // ssl: {
-        //   rejectUnauthorized: false
-        // }
+        ssl: {
+          rejectUnauthorized: false
+        }
       };
       Pool.instance = new PgPool(opt);
     }

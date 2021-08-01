@@ -33,5 +33,11 @@ export declare const queriesOrder: {
     UPDATE_ORDER_DETAIL: string;
     DELETE_ORDER_DETAIL: string;
     DELETE_ORDER: string;
+    MONT_ORDER: string;
+};
+export declare const queriesPayment: {
+    CREATE_PAYMENT: string;
+    APPROVED_PAYMENT: string;
+    DEPRECATED_PAYMENT: string;
 };
 //# sourceMappingURL=queries.d.ts.map

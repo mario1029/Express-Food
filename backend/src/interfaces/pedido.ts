@@ -7,5 +7,6 @@ export interface pedido{
 
 export interface detallesPedido{
     producto: string,
-    cantidad: number
+    cantidad: number,
+    precio:number
 } 

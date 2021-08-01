@@ -10,6 +10,7 @@ const premisses_1 = __importDefault(require("./premisses"));
 const product_1 = __importDefault(require("./product"));
 const files_1 = __importDefault(require("./files"));
 const order_1 = __importDefault(require("./order"));
+const payment_1 = __importDefault(require("./payment"));
 const auth_1 = require("@validations/auth");
 const router = express_1.Router();
 router.use('/session', session_1.default);
@@ -18,5 +19,6 @@ router.use('/premisses', auth_1.isAuth, premisses_1.default);
 router.use('/product', auth_1.isAuth, product_1.default);
 router.use('/file', auth_1.isAuth, files_1.default);
 router.use('/order', auth_1.isAuth, order_1.default);
+router.use('/payment', auth_1.isAuth, payment_1.default);
 exports.default = router;
 //# sourceMappingURL=index.js.map

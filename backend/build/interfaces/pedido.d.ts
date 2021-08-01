@@ -7,5 +7,6 @@ export interface pedido {
 export interface detallesPedido {
     producto: string;
     cantidad: number;
+    precio: number;
 }
 //# sourceMappingURL=pedido.d.ts.map
