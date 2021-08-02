@@ -2,17 +2,17 @@ import { StatusBar } from 'expo-status-bar';
 import React, {useEffect} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable, SectionList, Image, Alert, RefreshControl } from 'react-native';
 import {Card } from 'react-native-elements'
-import { establecimiento } from '../../interfaces/establecimientos';
+import { Premisess } from '../../interfaces/Premisess';
 import { getPremissesByEmail, deletePremisses } from '../../utils/premisess.comm';
 
-const Premisess= ({navigation}:any)=>{
+const MyPremisess= ({navigation}:any)=>{
 
     const [aprobadas, setAprobadas] = React.useState([{nombre:'', direccion:'', correoE:'', numeroContacto:'', urlPagina:'', urlFoto:''}]);
     const [enEspera, setEspera] = React.useState([{ nombre:'', direccion:'', correoE:'', numeroContacto:'', urlPagina:'', urlFoto:''}]);
     const [refresh, setRefresh]= React.useState(false);
 
     const loadPremisess = async ()=>{
-        const premisess:establecimiento[] = await getPremissesByEmail();
+        const premisess:Premisess[] = await getPremissesByEmail();
         
         setAprobadas(premisess.filter((rows)=>{
           return rows.aprobado==true
@@ -26,7 +26,7 @@ const Premisess= ({navigation}:any)=>{
     }
   
     const filterNotes = async (filter:string)=>{
-        const premisess:establecimiento[] = await getPremissesByEmail();
+        const premisess:Premisess[] = await getPremissesByEmail();
       setAprobadas(premisess.filter((rows)=>{
         return rows.aprobado==true
       }));
@@ -211,4 +211,4 @@ const styles = StyleSheet.create({
   });
   
 
-export default Premisess;
+export default MyPremisess;

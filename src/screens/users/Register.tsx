@@ -79,6 +79,7 @@ export default function App({navigation}:any) {
                 style={styles.input}
                 onChangeText={setPass}
                 value={pass}
+                secureTextEntry={true}
                 placeholder="ingrese su Contraseña"
                 autoCompleteType="password"
                 keyboardType="default"

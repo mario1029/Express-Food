@@ -1,4 +1,4 @@
-export interface Usuario {
+export interface User {
   nombre?: string;
   correo: string;
   numero?: string;
@@ -6,6 +6,6 @@ export interface Usuario {
   admin?: boolean;
 }
 
-export interface UsuarioCompleto extends Usuario {
+export interface UserComplete extends User {
   contrasenia?: string;
 }

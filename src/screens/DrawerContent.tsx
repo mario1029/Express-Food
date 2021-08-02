@@ -19,6 +19,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { logout } from '../utils/user.comm';
+import { deleteOrder } from '../utils/order.comm';
 
 export function DrawerContent(props:any){
 
@@ -156,15 +157,7 @@ export function DrawerContent(props:any){
                             label="Register"
                             onPress={()=>props.navigation.navigate('Register')}
                         />
-                         <DrawerItem
-                            icon={({color, size})=>
-                                <Icon
-                                    name="truck-delivery"
-                                    color={color}
-                                    size={size} />}
-                                label="pay"
-                                onPress={()=>props.navigation.navigate('pay')}
-                        />
+                    </>}
                     </Drawer.Section>
                     <Drawer.Section title="Preferences">
                         <TouchableRipple onPress={()=>{ChangeColor()}}>
@@ -187,10 +180,16 @@ export function DrawerContent(props:any){
                         size={size} />}
                     label="Logout"
                     onPress={async ()=>{
+                        const order= await AsyncStorage.getItem('order');
+                        if(order){
+                            await deleteOrder(+order);
+                            await AsyncStorage.removeItem('order');
+                        }
                         const result= await logout();
+                        console.log(order);
                         if(result.status==200){
-                            Alert.alert("Sesion finalizada", result.message)
-                            await AsyncStorage.setItem('login',  '')
+                            Alert.alert(result.message,order?'Los datos del pedido actual seran borrados, su sesion ha finalizado':'Su sesion ha finalizado' )
+                            await AsyncStorage.removeItem('login');
                             props.navigation.navigate('Login')
                         }else{
                             Alert.alert("Error", result.response)

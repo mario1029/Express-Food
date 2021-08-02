@@ -1,4 +1,4 @@
-import {producto} from '../interfaces/producto';
+import {Product} from '../interfaces/Product';
 
 export const getMyProduct= async(id:number)=>{
     const response= await fetch(`https://expressfoodserver.herokuapp.com/product/lista/${id}`,{
@@ -22,7 +22,18 @@ export const getProduct= async(id:number)=>{
     return result.producto;
 }
 
-export const insertProduct= async({product, id}:{product:producto, id:number})=>{
+export const getListProduct= async(id:number)=>{
+    const response= await fetch(`https://expressfoodserver.herokuapp.com/product//lista/filtrar/${id}`,{
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json"
+        },
+    });
+    const result= await response.json();
+    return result.productos;
+}
+
+export const insertProduct= async({product, id}:{product:Product, id:number})=>{
     const response= await fetch(`https://expressfoodserver.herokuapp.com/product/new/${id}`,{
         method: 'POST',
         headers: {
@@ -45,7 +56,7 @@ export const deleteProduct= async(id:number)=>{
     return result;
 }
 
-export const updateProduct= async({product, id}:{product:producto, id:number})=>{
+export const updateProduct= async({product, id}:{product:Product, id:number})=>{
     const response= await fetch(`https://expressfoodserver.herokuapp.com/product/${id}`,{
         method: 'PUT',
         headers: {

@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import { StyleSheet, Text, Alert, RefreshControl, TouchableOpacity, Image, Pressable,FlatList, TextInput, View } from 'react-native';
 
 import {Card } from 'react-native-elements';
-import { producto } from '../../interfaces/producto';
+import { Product } from '../../interfaces/Product';
 import { deleteProduct, getMyProduct } from '../../utils/product.comm';
 
 export default function Products({navigation, route}:any) {
@@ -12,7 +12,7 @@ export default function Products({navigation, route}:any) {
   const [refresh, setRefresh]= React.useState(false);
 
   const loadProducts = async ()=>{
-    const products:producto[] = await getMyProduct(route.params.id);
+    const products:Product[] = await getMyProduct(route.params.id);
     
     setProductos(products);
     setRefresh(false);

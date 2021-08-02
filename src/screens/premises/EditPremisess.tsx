@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useEffect} from 'react';
 import { StyleSheet, Text, View,ScrollView, TextInput, RefreshControl, TouchableOpacity, Alert } from 'react-native';
-import { establecimiento } from '../../interfaces/establecimientos';
+import { Premisess } from '../../interfaces/Premisess';
 import { getPremissesByID, updatePremisess } from '../../utils/premisess.comm';
 
 const editPremisess= ({navigation, route}:any)=> {
@@ -15,7 +15,7 @@ const editPremisess= ({navigation, route}:any)=> {
 
     const detailPremisess = async ()=>{
         console.log(route.params.id)
-        const data:establecimiento = await getPremissesByID(route.params.id);
+        const data:Premisess = await getPremissesByID(route.params.id);
         setNombre(data.nombre)
         setEmail(data.correoE)
         setDireccion(data.direccion)

@@ -70,6 +70,17 @@ export const updateOrderProduct = async({idPedido, idProducto, cantidad}:{idPedi
     return result;
 }
 
+export const terminateOrder = async(idPedido:number)=>{
+  const response = await fetch(`https://expressfoodserver.herokuapp.com/order/terminate/${idPedido}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
+    const result = await response.json();
+    return result;
+}
+
 export const deleteOrderProduct = async({idPedido, idProducto}:{idPedido:number, idProducto:number})=>{
   const response = await fetch(`https://expressfoodserver.herokuapp.com/order/${idPedido}`, {
       method: "DELETE",

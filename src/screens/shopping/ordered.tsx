@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import { StyleSheet, Text, Dimensions,RefreshControl, Image, ScrollView,FlatList, TextInput, View, TouchableOpacity } from 'react-native';
 
 import {Card } from 'react-native-elements';
-import { producto } from '../../interfaces/producto';
+import { Product } from '../../interfaces/Product';
 import { getProduct } from '../../utils/product.comm';
 
 import MapView from 'react-native-maps';

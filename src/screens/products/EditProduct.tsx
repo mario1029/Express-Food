@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { StyleSheet, Text, ScrollView,View, TextInput, Alert, TouchableOpacity, RefreshControl, Image} from 'react-native';
 import { getProduct, updateProduct } from '../../utils/product.comm';
-import { producto } from '../../interfaces/producto';
+import { Product } from '../../interfaces/Product';
 export default function AddProduct({navigation, route}:any) {
     const [image, setImage] = React.useState("");
     const [nombre, setNombre] = React.useState("");
@@ -13,7 +13,7 @@ export default function AddProduct({navigation, route}:any) {
 
     const detailProduct = async ()=>{
       console.log(route.params.id)
-      const data:producto = await getProduct(route.params.id);
+      const data:Product = await getProduct(route.params.id);
       console.log(data)
       setNombre(data.nombre)
       setPrecio(data.precio+'')

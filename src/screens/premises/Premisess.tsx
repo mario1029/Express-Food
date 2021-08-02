@@ -2,16 +2,16 @@ import { StatusBar } from 'expo-status-bar';
 import React, {useEffect} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable, FlatList, Image, RefreshControl } from 'react-native';
 import {Card } from 'react-native-elements'
-import { establecimiento } from '../../interfaces/establecimientos';
+import { Premisess } from '../../interfaces/Premisess';
 import { getPremisses} from '../../utils/premisess.comm';
 
-const Premisess= ({navigation}:any)=>{
+const premisess= ({navigation}:any)=>{
 
     const [establecimientos, setEstablecimientos] = React.useState([{nombre:'', direccion:'', correoE:'', numeroContacto:'', urlPagina:'', urlFoto:''}]);
     const [refresh, setRefresh]= React.useState(false);
 
     const loadPremisess = async ()=>{
-        const premisess:establecimiento[] = await getPremisses();
+        const premisess:Premisess[] = await getPremisses();
         setEstablecimientos(premisess)
         setRefresh(false);
      //   setLoading(false);
@@ -143,4 +143,4 @@ const styles = StyleSheet.create({
   });
   
 
-export default Premisess;
+export default premisess;

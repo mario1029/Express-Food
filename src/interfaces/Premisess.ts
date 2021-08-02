@@ -1,4 +1,4 @@
-export interface establecimiento{
+export interface Premisess{
     id_establecimiento?: number, 
     nombre: string,
     direccion: string,

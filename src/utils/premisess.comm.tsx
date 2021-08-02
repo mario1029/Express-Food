@@ -1,7 +1,7 @@
-import {establecimiento} from '../interfaces/establecimientos';
+import {Premisess} from '../interfaces/Premisess';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const insertPremisess = async(establecimiento:establecimiento)=>{
+export const insertPremisess = async(establecimiento:Premisess)=>{
     console.log(establecimiento);
     const response= await fetch('https://expressfoodserver.herokuapp.com/premisses/new',{
         method: 'POST',
@@ -58,7 +58,7 @@ export const deletePremisses= async(id:number)=>{
     return result.establecimientos;
 }
 
-export const updatePremisess = async({establecimiento, id}:{establecimiento:establecimiento, id: number})=>{
+export const updatePremisess = async({establecimiento, id}:{establecimiento:Premisess, id: number})=>{
     console.log(establecimiento);
     const response= await fetch(`https://expressfoodserver.herokuapp.com/premisses/${id}`,{
         method: 'PUT',
