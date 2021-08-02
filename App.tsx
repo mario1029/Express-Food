@@ -18,6 +18,9 @@ import Premisess from './src/screens/premises/Premisess';
 import myPremisess from './src/screens/premises/MyPremisess';
 import addPremisess from './src/screens/premises/AddPremisess';
 import editPremisess from './src/screens/premises/EditPremisess';
+import Cart from './src/screens/shopping/cart';
+import Ordered from './src/screens/shopping/ordered';
+import Tracking from './src/screens/shopping/tracking';
 import { DrawerContent } from './src/screens/DrawerContent';
 
 const Drawer = createDrawerNavigator();
@@ -38,6 +41,9 @@ export default function App() {
         <Drawer.Screen name="myPremisess" component={myPremisess}/>
         <Drawer.Screen name="addPremisess" component={addPremisess}/>
         <Drawer.Screen name="editPremisess" component={editPremisess}/>
+        <Drawer.Screen name="Cart" component={Cart}/>
+        <Drawer.Screen name="Ordered" component={Ordered}/>
+        <Drawer.Screen name="Tracking" component={Tracking}/>
       </Drawer.Navigator>
     </NavigationContainer>
   );

@@ -1,12 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useEffect} from 'react';
-import { StyleSheet, Text, TouchableOpacity,RefreshControl, Image, Pressable,FlatList, TextInput, View } from 'react-native';
+import { StyleSheet, Text, Dimensions,RefreshControl, Image, ScrollView,FlatList, TextInput, View, TouchableOpacity } from 'react-native';
 
 import {Card } from 'react-native-elements';
 import { producto } from '../../interfaces/producto';
 import { getProduct } from '../../utils/product.comm';
 
-export default function Cart({navigation, route}:any) {
+import MapView from 'react-native-maps';
+
+export default function Ordered({navigation, route}:any) {
  
   const [productos,setProductos] = React.useState([{nombre:'', descripcion:'', precio:0, urlfoto:''}]);
   const [refresh, setRefresh]= React.useState(false);
@@ -27,7 +29,7 @@ const onRefresh= ()=>{
   loadProducts(); 
 }, [])
   const Item = ( {nombre, descripcion, urifoto , precio}:any ) => (
-
+    
       <View>
         <Card>
             <Card.Divider/>
@@ -51,12 +53,7 @@ const onRefresh= ()=>{
             <Text>Precio: {precio}$</Text>
             <Text>Descripcion: {descripcion}</Text>
             <View style={styles.buttonView}>
-              <TouchableOpacity 
-                  //onPress={submit}
-                  style={styles.button}
-                  >
-                  <Text style={styles.buttonText}>+Borrar</Text>
-              </TouchableOpacity>
+              
             </View>
           </Card>
       </View>  
@@ -74,33 +71,23 @@ const onRefresh= ()=>{
   return (
       <View style={styles.container}>
         <View style={styles.containerTitle}>
-            <Text style={styles.title}>Tu carrito</Text>
+            <Text style={styles.title}>Ordenado:</Text>
         </View>
-      <View style={styles.input}>
-          <TextInput
-          //style={styles.input}
-          //onChangeText={setText}
-          //value={text}
-          placeholder={"Producto"}
-          //onSubmitEditing={ ()=>search(text)}
-          />
-      </View>
       <View style={styles.list}>
+        <View style={styles.buttonView}>
+              <TouchableOpacity 
+                  onPress={()=>navigation.navigate('Tracking')}
+                  style={styles.button}
+                  >
+                  <Text style={styles.buttonText}>Mapa</Text>
+              </TouchableOpacity>
+        </View>
         <FlatList
         refreshControl={<RefreshControl refreshing={refresh} onRefresh={onRefresh} />}
         data={productos}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         />
-        </View>
-        <Text style={styles.total}>Total:</Text>
-        <View style={styles.buttonView}>
-              <TouchableOpacity 
-                  //onPress={checkout}
-                  style={styles.checkout}
-                  >
-                  <Text style={styles.buttonText}>+Pagar</Text>
-              </TouchableOpacity>
         </View>
     </View>
   );
@@ -174,5 +161,5 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: 30,
         fontWeight: "bold"
-    }
+    },
 });

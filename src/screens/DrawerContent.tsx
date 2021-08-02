@@ -117,7 +117,26 @@ export function DrawerContent(props:any){
                                         color={color}
                                         size={size} />}
                                     label="Ordered"
-                                    onPress={() => { } } /></>
+                                    onPress={() => { } } />
+                            <DrawerItem
+                            icon={({color, size})=>
+                                <Icon
+                                    name="account-arrow-right"
+                                    color={color}
+                                    size={size} />}
+                            label="Orders"
+                            onPress={()=>props.navigation.navigate('Ordered')}
+                            />
+                            <DrawerItem
+                            icon={({color, size})=>
+                                <Icon
+                                    name="account-arrow-right"
+                                    color={color}
+                                    size={size} />}
+                            label="Cart"
+                            onPress={()=>props.navigation.navigate('Cart')}
+                            />
+                        </>
                     :<>
                         <DrawerItem
                         icon={({color, size})=>
