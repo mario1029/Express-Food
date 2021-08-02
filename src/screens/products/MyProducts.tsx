@@ -40,8 +40,8 @@ const onRefresh= ()=>{
     console.log("borrar product")
   }
 
-  const editProduct= (data:any)=>{
-    navigation.navigate('EditProduct', {data});
+  const editProduct= (id:number)=>{
+    navigation.navigate('EditProduct', {id:id});
   }
 
   const Item = ( {nombre, descripcion, urifoto , precio, id}:any ) => (
@@ -76,7 +76,7 @@ const onRefresh= ()=>{
                   <Text style={styles.buttonText}>Borrar</Text>
               </TouchableOpacity>
               <TouchableOpacity 
-                  onPress={()=>{editProduct({nombre, descripcion, urifoto , precio})}}
+                  onPress={()=>{editProduct(id)}}
                   style={styles.buttonEdit}
                   >
                   <Text style={styles.buttonText}>Editar</Text>

@@ -1,9 +1,39 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, {useEffect} from 'react';
 import * as ImagePicker from 'expo-image-picker';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image} from 'react-native';
+import { StyleSheet, Text, ScrollView,View, TextInput, Alert, TouchableOpacity, RefreshControl, Image} from 'react-native';
+import { getProduct, updateProduct } from '../../utils/product.comm';
+import { producto } from '../../interfaces/producto';
 export default function AddProduct({navigation, route}:any) {
     const [image, setImage] = React.useState("");
+    const [nombre, setNombre] = React.useState("");
+    const [descripcion, setDescripcion] = React.useState("");
+    const [precio, setPrecio] = React.useState("");
+    const [refresh, setRefresh]= React.useState(false);
+
+    const detailProduct = async ()=>{
+      console.log(route.params.id)
+      const data:producto = await getProduct(route.params.id);
+      console.log(data)
+      setNombre(data.nombre)
+      setPrecio(data.precio+'')
+      setDescripcion(data.descripcion)
+      setImage(data.urlfoto||'')
+      setRefresh(false)
+   //   setLoading(false);  
+    }
+
+  const onRefresh= ()=>{
+      // setLoading(true)
+      setRefresh(true);
+       detailProduct(); 
+     }
+
+  useEffect(()=>{
+     //Aqui se guardan los valores de route dentro de las variables
+          detailProduct()
+  }, [])
+
     console.log(route.params.data)
     const pickImage = async () => {
     let result = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -25,15 +55,35 @@ export default function AddProduct({navigation, route}:any) {
     }
   };    
 
-    const submit = ()=>{
-        console.log("Data:"+route.params.data)
-        navigation.navigate('Products');
+    const submit = async ()=>{
+      const result= await updateProduct({
+        product:{
+          nombre:nombre,
+          descripcion:descripcion,
+          precio:+precio,
+          urlfoto:'',
+          disponible:true
+        },id:route.params.id
+      })
+      if(result.status==304){
+        Alert.alert("Notificacion", result.response);
+      }else if(result.status==400){
+          Alert.alert("Error de credenciales", result.error.msg)
+      }else if(result.status==200){
+          //await storeData(usuario);
+          Alert.alert("Producto Actualizado","Produto ha sido actualizado existosamente");
+          console.log(result);
+          navigation.navigate('myPremisess');
+      }
     }
   
   return (
-    <View style={styles.container}>
+    <ScrollView
+      refreshControl={<RefreshControl refreshing={refresh} onRefresh={onRefresh} />}
+    >
+      <View style={styles.container}>
         <View>
-            <Text style={styles.title}>Crear Producto</Text>
+            <Text style={styles.title}>Editar Producto</Text>
         </View>
         <View >
             <Text style={styles.text}>Nombre</Text>
@@ -43,7 +93,8 @@ export default function AddProduct({navigation, route}:any) {
                 autoCompleteType="off"
                 keyboardType="default"
                 textAlign="center"
-                value={route.params.data.nombre}
+                value={nombre}
+                onChangeText={setNombre}
             />
             <Text style={styles.text} >Descripcion</Text>
             <TextInput
@@ -52,7 +103,8 @@ export default function AddProduct({navigation, route}:any) {
                 autoCompleteType="off"
                 keyboardType="default"
                 textAlign="left"
-                value={route.params.data.descripcion}
+                value={descripcion}
+                onChangeText={setDescripcion}
             />
             <View>
             {image !== '' ?
@@ -80,7 +132,8 @@ export default function AddProduct({navigation, route}:any) {
                 autoCompleteType="off"
                 keyboardType="number-pad"
                 textAlign="center"
-                value={route.params.data.precio+''}
+                value={precio+''}
+                onChangeText={setPrecio}
             />
         </View>
         <View >
@@ -93,6 +146,7 @@ export default function AddProduct({navigation, route}:any) {
         </View>
       <StatusBar style="auto" />
     </View>
+  </ScrollView>
   );
 }
 

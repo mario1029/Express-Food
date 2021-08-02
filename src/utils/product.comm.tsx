@@ -12,14 +12,14 @@ export const getMyProduct= async(id:number)=>{
 }
 
 export const getProduct= async(id:number)=>{
-    const response= await fetch(`https://expressfoodserver.herokuapp.com/product/lista/filtrar/${id}`,{
+    const response= await fetch(`https://expressfoodserver.herokuapp.com/product/${id}`,{
         method: 'GET',
         headers: {
             "Content-Type": "application/json"
         },
     });
     const result= await response.json();
-    return result.productos;
+    return result.producto;
 }
 
 export const insertProduct= async({product, id}:{product:producto, id:number})=>{
@@ -40,6 +40,18 @@ export const deleteProduct= async(id:number)=>{
         headers: {
             "Content-Type": "application/json"
         },
+    });
+    const result= await response.json();
+    return result;
+}
+
+export const updateProduct= async({product, id}:{product:producto, id:number})=>{
+    const response= await fetch(`https://expressfoodserver.herokuapp.com/product/${id}`,{
+        method: 'PUT',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(product)
     });
     const result= await response.json();
     return result;

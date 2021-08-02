@@ -107,6 +107,15 @@ export function DrawerContent(props:any){
                                 label="Ordered"
                                 onPress={()=>{}}
                         />
+                         <DrawerItem
+                            icon={({color, size})=>
+                                <Icon
+                                    name="truck-delivery"
+                                    color={color}
+                                    size={size} />}
+                                label="pay"
+                                onPress={()=>props.navigation.navigate('pay')}
+                        />
                     </Drawer.Section>
                     <Drawer.Section title="Preferences">
                         <TouchableRipple onPress={()=>{ChangeColor()}}>

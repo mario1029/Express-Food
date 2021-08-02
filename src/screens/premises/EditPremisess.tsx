@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useEffect} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View,ScrollView, TextInput, RefreshControl, TouchableOpacity, Alert } from 'react-native';
 import { establecimiento } from '../../interfaces/establecimientos';
 import { getPremissesByID, updatePremisess } from '../../utils/premisess.comm';
 
@@ -79,7 +79,10 @@ const editPremisess= ({navigation, route}:any)=> {
     }
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      refreshControl={<RefreshControl refreshing={refresh} onRefresh={onRefresh} />}
+    >
+      <View style={styles.container}>
         <View>
             <Text style={styles.title}>Editar establecimiento</Text>
         </View>
@@ -143,7 +146,8 @@ const editPremisess= ({navigation, route}:any)=> {
             </TouchableOpacity>
         </View>
       <StatusBar style="auto" />
-    </View>
+      </View>
+    </ScrollView>
   );
 }
 
