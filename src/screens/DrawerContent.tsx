@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { ViewBase, StyleSheet, View, Alert } from 'react-native';
 import { 
     DrawerContentScrollView,
@@ -16,12 +16,14 @@ import {
     Switch
 } from 'react-native-paper';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { logout } from '../utils/user.comm';
 
 export function DrawerContent(props:any){
 
     const [isDark, setIsDark] = React.useState(false);
+    const [isLogged, setLogged] = React.useState(false);
     const [backGroundColor, setBackGroundColor] = React.useState("#ffffff");
     const ChangeColor = ()=>{
         setIsDark(!isDark);
@@ -32,6 +34,22 @@ export function DrawerContent(props:any){
         }
     }
 
+    const getLogin = async()=>{
+        try {
+            let value =await AsyncStorage.getItem('login')
+            if(value!=null){
+                setLogged(true);
+            }else{
+                setLogged(false);
+            }
+          } catch (e) {
+                console.log(e)
+          }
+    }
+
+    useEffect(()=>{
+        getLogin()
+    })
     return(
         <View style={{flex:1, backgroundColor:backGroundColor}}>
             <DrawerContentScrollView {...props}>
@@ -71,41 +89,72 @@ export function DrawerContent(props:any){
                             label="Home"
                             onPress={()=>props.navigation.navigate('Home')}
                         />
-                         <DrawerItem
-                            icon={({color, size})=>
-                                <Icon
+                        { isLogged ?
+                         <><DrawerItem
+                                icon={({ color, size }) => <Icon
                                     name="store-outline"
                                     color={color}
                                     size={size} />}
                                 label="Premisess"
-                                onPress={()=>props.navigation.navigate('Premisess')}
+                                onPress={() => props.navigation.navigate('Premisess')} />
+                            <DrawerItem
+                                    icon={({ color, size }) => <Icon
+                                        name="plus-box-multiple"
+                                        color={color}
+                                        size={size} />}
+                                    label="addPremisess"
+                                    onPress={() => props.navigation.navigate('addPremisess')} />
+                            <DrawerItem
+                                    icon={({ color, size }) => <Icon
+                                        name="storefront-outline"
+                                        color={color}
+                                        size={size} />}
+                                    label="myPremisess"
+                                    onPress={() => props.navigation.navigate('myPremisess')} />
+                            <DrawerItem
+                                    icon={({ color, size }) => <Icon
+                                        name="truck-delivery"
+                                        color={color}
+                                        size={size} />}
+                                    label="Ordered"
+                                    onPress={() => { } } />
+                            <DrawerItem
+                            icon={({color, size})=>
+                                <Icon
+                                    name="account-arrow-right"
+                                    color={color}
+                                    size={size} />}
+                            label="Orders"
+                            onPress={()=>props.navigation.navigate('Ordered')}
+                            />
+                            <DrawerItem
+                            icon={({color, size})=>
+                                <Icon
+                                    name="account-arrow-right"
+                                    color={color}
+                                    size={size} />}
+                            label="Cart"
+                            onPress={()=>props.navigation.navigate('Cart')}
+                            />
+                        </>
+                    :<>
+                        <DrawerItem
+                        icon={({color, size})=>
+                            <Icon
+                                name="account-box"
+                                color={color}
+                                size={size} />}
+                            label="Login"
+                            onPress={()=>props.navigation.navigate('Login')}
                         />
                         <DrawerItem
-                            icon={({color, size})=>
-                                <Icon
-                                    name="plus-box-multiple"
-                                    color={color}
-                                    size={size} />}
-                                label="addPremisess"
-                                onPress={()=>props.navigation.navigate('addPremisess')}
-                        />
-                          <DrawerItem
-                            icon={({color, size})=>
-                                <Icon
-                                    name="storefront-outline"
-                                    color={color}
-                                    size={size} />}
-                                label="myPremisess"
-                                onPress={()=>props.navigation.navigate('myPremisess')}
-                        />
-                        <DrawerItem
-                            icon={({color, size})=>
-                                <Icon
-                                    name="truck-delivery"
-                                    color={color}
-                                    size={size} />}
-                                label="Ordered"
-                                onPress={()=>{}}
+                        icon={({color, size})=>
+                            <Icon
+                                name="account-arrow-right"
+                                color={color}
+                                size={size} />}
+                            label="Register"
+                            onPress={()=>props.navigation.navigate('Register')}
                         />
                          <DrawerItem
                             icon={({color, size})=>
@@ -141,6 +190,7 @@ export function DrawerContent(props:any){
                         const result= await logout();
                         if(result.status==200){
                             Alert.alert("Sesion finalizada", result.message)
+                            await AsyncStorage.setItem('login',  '')
                             props.navigation.navigate('Login')
                         }else{
                             Alert.alert("Error", result.response)
