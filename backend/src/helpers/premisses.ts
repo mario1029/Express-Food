@@ -1,14 +1,14 @@
 import Pool from '@utils/pool';
 import { queriesPremisess } from '@utils/queries';
-import { establecimiento } from '@interfaces/establecimientos';
+import { Premisess } from '@interfaces/Premisess';
 
 const pool = Pool.getInstance();
 
-export const getPremisess= async ():Promise<establecimiento[]> =>{
+export const getPremisess= async ():Promise<Premisess[]> =>{
     const client = await pool.connect();
     try {
         const response = (await client.query(queriesPremisess.GET_PREMISESS)).rows;
-        const user: establecimiento[] = response.map((rows)=>{
+        const user: Premisess[] = response.map((rows)=>{
             return {
                 id_establecimiento:rows.id_establecimiento,
                 nombre: rows.nombre,
@@ -17,7 +17,9 @@ export const getPremisess= async ():Promise<establecimiento[]> =>{
                 direccion: rows.direccion,
                 urlPagina: rows.urlpagina,
                 aprobado: rows.aprobado,
-                urlFoto: rows.urlfoto
+                urlFoto: rows.urlfoto,
+                latitud: rows.latitud,
+                longitud: rows.longitud
             }
         })
         return user;
@@ -29,11 +31,11 @@ export const getPremisess= async ():Promise<establecimiento[]> =>{
     }
 };
 
-export const getPremisessByEmail= async (correo:string):Promise<establecimiento[]> =>{
+export const getPremisessByEmail= async (correo:string):Promise<Premisess[]> =>{
     const client = await pool.connect();
     try {
         const response = (await client.query(queriesPremisess.GET_PREMISESS_BY_EMAIL,[correo])).rows;
-        const user: establecimiento[] = response.map((rows)=>{
+        const user: Premisess[] = response.map((rows)=>{
             return {
                 id_establecimiento:rows.id_establecimiento,
                 nombre: rows.nombre,
@@ -42,7 +44,9 @@ export const getPremisessByEmail= async (correo:string):Promise<establecimiento[
                 direccion: rows.direccion,
                 urlPagina: rows.urlpagina,
                 aprobado: rows.aprobado,
-                urlFoto: rows.urlfoto
+                urlFoto: rows.urlfoto,
+                latitud: rows.latitud,
+                longitud: rows.longitud
             }
         })
         return user;
@@ -54,11 +58,11 @@ export const getPremisessByEmail= async (correo:string):Promise<establecimiento[
     }
 };
 
-export const getPremisessById= async (id:number):Promise<establecimiento> =>{
+export const getPremisessById= async (id:number):Promise<Premisess> =>{
     const client = await pool.connect();
     try {
         const response = (await client.query(queriesPremisess.GET_PREMISESS_BY_ID,[id])).rows[0];
-        const user: establecimiento =  {
+        const user: Premisess =  {
             id_establecimiento:response.id_establecimiento,
             nombre: response.nombre,
             correoE: response.correoe,
@@ -66,7 +70,9 @@ export const getPremisessById= async (id:number):Promise<establecimiento> =>{
             direccion: response.direccion,
             urlPagina: response.urlpagina,
             aprobado: response.aprobado,
-            urlFoto: response.urlfoto
+            urlFoto: response.urlfoto,
+            latitud: response.latitud,
+            longitud: response.longitud
         }
         return user;
     } catch (e) {
@@ -77,11 +83,11 @@ export const getPremisessById= async (id:number):Promise<establecimiento> =>{
     }
 };
 
-export const getPremisessByAddress= async (direccion:string):Promise<establecimiento[]> =>{
+export const getPremisessByAddress= async (direccion:string):Promise<Premisess[]> =>{
     const client = await pool.connect();
     try {
         const response = (await client.query(queriesPremisess.GET_PREMISESS_BY_ADDRESS, [direccion])).rows;
-        const user: establecimiento[] = response.map((rows)=>{
+        const user: Premisess[] = response.map((rows)=>{
             return {
                 id_establecimiento:rows.id_establecimiento,
                 nombre: rows.nombre,
@@ -89,7 +95,9 @@ export const getPremisessByAddress= async (direccion:string):Promise<establecimi
                 numeroContacto: rows.numerocontacto,
                 direccion: rows.direccion,
                 urlPagina: rows.urlpagina,
-                urlFoto: rows.urlfoto
+                urlFoto: rows.urlfoto,
+                latitud: rows.latitud,
+                longitud: rows.longitud
             }
         })
         return user;
@@ -101,19 +109,21 @@ export const getPremisessByAddress= async (direccion:string):Promise<establecimi
     }
 };
 
-export const insertPremisess= async ({promisse,correo}:{promisse:establecimiento, correo: string}):Promise<establecimiento> =>{
+export const insertPremisess= async ({promisse,correo}:{promisse:Premisess, correo: string}):Promise<Premisess> =>{
     const client = await pool.connect();
-    const {nombre, direccion, correoE, numeroContacto, urlPagina}= promisse;
+    const {nombre, direccion, correoE, numeroContacto, urlPagina, latitud, longitud}= promisse;
     try {
         await client.query('BEGIN');
-        const response = (await client.query(queriesPremisess.INSERT_PREMISESS,[nombre, direccion, correoE, numeroContacto, urlPagina, correo])).rows[0];
-        const user: establecimiento = {
+        const response = (await client.query(queriesPremisess.INSERT_PREMISESS,[nombre, direccion, correoE, numeroContacto, urlPagina, correo, latitud, longitud])).rows[0];
+        const user: Premisess = {
             id_establecimiento:response.id_establecimiento,
             nombre: response.nombre,
             correoE: response.correoe,
             numeroContacto: response.numerocontacto,
             direccion: response.direccion,
-            urlPagina: response.urlpagina
+            urlPagina: response.urlpagina,
+            latitud: response.latitud,
+            longitud: response.longitud
         }
         await client.query('COMMIT');
         return user;
@@ -126,13 +136,13 @@ export const insertPremisess= async ({promisse,correo}:{promisse:establecimiento
     }
 };
 
-export const updatePremisses=async({promisse,id}:{promisse:establecimiento, id: number}):Promise<establecimiento>=>{
+export const updatePremisses=async({promisse,id}:{promisse:Premisess, id: number}):Promise<Premisess>=>{
     const client = await pool.connect();
     const {nombre, direccion, correoE, numeroContacto, urlPagina}= promisse;
     try {
         await client.query('BEGIN');
         const response = (await client.query(queriesPremisess.UPDATE_PREMISSES,[nombre, direccion, correoE, numeroContacto, urlPagina, id])).rows[0];
-        const user: establecimiento = {
+        const user: Premisess = {
             nombre: response.nombre,
             correoE: response.correoe,
             numeroContacto: response.numerocontacto,
@@ -150,12 +160,12 @@ export const updatePremisses=async({promisse,id}:{promisse:establecimiento, id: 
     }
 };
 
-export const approvedPremisses=async(id: number):Promise<establecimiento>=>{
+export const approvedPremisses=async(id: number):Promise<Premisess>=>{
     const client = await pool.connect();
     try {
         await client.query('BEGIN');
         const response = (await client.query(queriesPremisess.SET_APPROVED,[id])).rows[0];
-        const user: establecimiento = {
+        const user: Premisess = {
             nombre: response.nombre,
             correoE: response.correoe,
             numeroContacto: response.numerocontacto,

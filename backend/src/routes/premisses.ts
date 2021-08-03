@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import { premisessValidation, checkResult } from '@validations/fields';
 import { approvedPremisses, deletePremisses, getPremisess, getPremisessByAddress, getPremisessByEmail, getPremisessById, insertPremisess, updatePremisses } from '@helpers/premisses';
-import { establecimiento } from '@interfaces/establecimientos';
+import { Premisess } from '@interfaces/Premisess';
 
 const router = Router();
 
 router.get('',async (req:any, res)=>{
     try {
-        const establecimiento:establecimiento[]= await getPremisess();
+        const establecimiento:Premisess[]= await getPremisess();
         res.status(200).json({ status: 200, establecimientos: establecimiento, message: 'Establecimientos encontrados correctamente' });
     } catch (e) {
         res.status(500).json({ status: 500, error: e, message: 'Error al buscar los establecimientos' });
@@ -16,7 +16,7 @@ router.get('',async (req:any, res)=>{
 
 router.get('/correo',async (req:any, res)=>{
     try {
-        const establecimiento:establecimiento[]= await getPremisessByEmail(req.user.correo);
+        const establecimiento:Premisess[]= await getPremisessByEmail(req.user.correo);
         res.status(200).json({ status: 200, establecimientos: establecimiento, message: 'Establecimientos encontrados correctamente' });
     } catch (e) {
         res.status(500).json({ status: 500, error: e, message: 'Error al buscar los establecimientos' });
@@ -25,7 +25,7 @@ router.get('/correo',async (req:any, res)=>{
 
 router.get('/address/:address', async(req, res)=>{
     try {
-        const establecimiento:establecimiento[]= await getPremisessByAddress(req.params.address);
+        const establecimiento:Premisess[]= await getPremisessByAddress(req.params.address);
         res.status(200).json({ status: 200, establecimientos: establecimiento, message: 'Establecimientos encontrados correctamente' });
     } catch (e) {
         res.status(500).json({ status: 500, error: e, message: 'Error al buscar los establecimientos' });
@@ -34,7 +34,7 @@ router.get('/address/:address', async(req, res)=>{
 
 router.get('/detail/:id', async(req, res)=>{
     try {
-        const establecimiento:establecimiento= await getPremisessById(+req.params.id);
+        const establecimiento:Premisess= await getPremisessById(+req.params.id);
         res.status(200).json({ status: 200, establecimiento: establecimiento, message: 'Establecimientos encontrados correctamente' });
     } catch (e) {
         res.status(500).json({ status: 500, error: e, message: 'Error al buscar los establecimientos' });
@@ -43,7 +43,7 @@ router.get('/detail/:id', async(req, res)=>{
 
 router.post('/new', premisessValidation, checkResult,async(req:any, res)=>{
     try {
-        const establecimiento:establecimiento= await insertPremisess({
+        const establecimiento:Premisess= await insertPremisess({
             promisse:req.body,
             correo:req.user.correo
         });
@@ -55,7 +55,7 @@ router.post('/new', premisessValidation, checkResult,async(req:any, res)=>{
 
 router.put('/approved/:id', async(req, res)=>{
     try {
-        const establecimiento:establecimiento= await approvedPremisses(+req.params.id);
+        const establecimiento:Premisess= await approvedPremisses(+req.params.id);
         res.status(200).json({ status: 200, establecimientos: establecimiento, message: 'Establecimiento aprobado correctamente' });
     } catch (e) {
         res.status(500).json({ status: 500, error: e, message: 'Error al aprobar el establecimiento' });
@@ -64,7 +64,7 @@ router.put('/approved/:id', async(req, res)=>{
 
 router.put('/:id', premisessValidation, checkResult, async(req, res)=>{
     try {
-        const establecimiento:establecimiento= await updatePremisses({
+        const establecimiento:Premisess= await updatePremisses({
             promisse:req.body,
             id:+req.params.id
         });

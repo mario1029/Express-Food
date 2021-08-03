@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { producto } from '@interfaces/producto';
+import { Product } from '@interfaces/Product';
 import multer from 'multer';
 import multerconfig from '@utils/multer'
 import { filePremisses, fileProduct } from '@helpers/files';

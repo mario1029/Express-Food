@@ -1,16 +1,16 @@
 import Pool from '@utils/pool';
 import { queries } from '@utils/queries';
-import { Usuario } from '@interfaces/usuario';
+import { User } from '@interfaces/User';
 
 const pool = Pool.getInstance();
 
-export const updateUser = async ({body, idCorreo}:{body:Usuario, idCorreo:string}): Promise<Usuario>=> {
+export const updateUser = async ({body, idCorreo}:{body:User, idCorreo:string}): Promise<User>=> {
   const client = await pool.connect();
   const { nombre, correo, numero, direccion } = body;
   try {
     await client.query('BEGIN');
     const response = (await client.query(queries.UPDATE_USER_BY_EMAIL, [nombre, correo, numero, direccion, idCorreo])).rows[0];
-    const user: Usuario = {
+    const user: User = {
       nombre: response.nombre,
       correo: response.correo,
       numero: response.numero,

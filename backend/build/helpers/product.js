@@ -3,10 +3,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProducto = exports.setAvailability = exports.updateProduct = exports.insertProduct = exports.getProductFilter = exports.getProduct = void 0;
+exports.deleteProducto = exports.setAvailability = exports.updateProduct = exports.insertProduct = exports.getProductFilter = exports.getProduct = exports.getProductDetail = void 0;
 const pool_1 = __importDefault(require("@utils/pool"));
 const queries_1 = require("@utils/queries");
 const pool = pool_1.default.getInstance();
+const getProductDetail = async (idProducto) => {
+    const client = await pool.connect();
+    try {
+        const response = (await client.query(queries_1.queriesProduct.GET_PRODUCT, [idProducto])).rows[0];
+        const product = {
+            id_producto: response.id_producto,
+            nombre: response.nombre,
+            descripcion: response.descripcion,
+            precio: response.precio,
+            disponible: response.disponible,
+            urlfoto: response.urlfoto
+        };
+        return product;
+    }
+    catch (e) {
+        console.log(e);
+        throw e;
+    }
+    finally {
+        client.release();
+    }
+};
+exports.getProductDetail = getProductDetail;
 const getProduct = async (idEstablecimieto) => {
     const client = await pool.connect();
     try {

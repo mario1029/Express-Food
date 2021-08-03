@@ -1,14 +1,35 @@
 import Pool from '@utils/pool';
 import { queriesProduct } from '@utils/queries';
-import { producto } from '@interfaces/producto';
+import { Product } from '@interfaces/Product';
 
 const pool = Pool.getInstance();
 
-export const getProduct= async(idEstablecimieto:number): Promise<producto[]>=>{
+export const getProductDetail = async(idProducto:number): Promise<Product>=>{
+    const client = await pool.connect();
+    try {
+        const response = (await client.query(queriesProduct.GET_PRODUCT, [idProducto])).rows[0];
+        const product: Product = {
+            id_producto: response.id_producto,
+            nombre: response.nombre,
+            descripcion: response.descripcion,
+            precio: response.precio,
+            disponible:response.disponible,
+            urlfoto:response.urlfoto
+        }
+        return product;
+    } catch (e) {
+        console.log(e);
+        throw e;
+    } finally {
+        client.release();
+    }
+};
+
+export const getProduct= async(idEstablecimieto:number): Promise<Product[]>=>{
     const client = await pool.connect();
     try {
         const response = (await client.query(queriesProduct.GET_PRODUCT_BY_PREMISESS, [idEstablecimieto])).rows;
-        const product: producto[] = response.map((rows)=>{
+        const product: Product[] = response.map((rows)=>{
             return {
                 id_producto: rows.id_producto,
                 nombre: rows.nombre,
@@ -27,11 +48,11 @@ export const getProduct= async(idEstablecimieto:number): Promise<producto[]>=>{
     }
 };
 
-export const getProductFilter= async(idEstablecimiento:number): Promise<producto[]>=>{
+export const getProductFilter= async(idEstablecimiento:number): Promise<Product[]>=>{
     const client = await pool.connect();
     try {
         const response = (await client.query(queriesProduct.GET_PRODUCT_BY_PREMISESS_FILTER,[idEstablecimiento])).rows;
-        const product: producto[] = response.map((rows)=>{
+        const product: Product[] = response.map((rows)=>{
             return {
                 id_producto: rows.id_producto,
                 nombre: rows.nombre,
@@ -49,13 +70,13 @@ export const getProductFilter= async(idEstablecimiento:number): Promise<producto
     }
 };
 
-export const insertProduct= async({producto, idEstablecimiento}:{producto:producto, idEstablecimiento:number}): Promise<producto>=>{
+export const insertProduct= async({producto, idEstablecimiento}:{producto:Product, idEstablecimiento:number}): Promise<Product>=>{
     const client = await pool.connect();
     const {nombre, descripcion, precio, disponible}= producto;
     try {
         await client.query('BEGIN');
         const response = (await client.query(queriesProduct.INSERT_PRODUCT,[nombre, descripcion, precio, disponible, idEstablecimiento])).rows[0];
-        const product: producto= {
+        const product: Product= {
             id_producto: response.id_producto,
             nombre: response.nombre,
             descripcion: response.descripcion,
@@ -73,13 +94,13 @@ export const insertProduct= async({producto, idEstablecimiento}:{producto:produc
     }
 };
 
-export const updateProduct= async({producto, idProducto}:{producto:producto, idProducto:number}): Promise<producto>=>{
+export const updateProduct= async({producto, idProducto}:{producto:Product, idProducto:number}): Promise<Product>=>{
     const client = await pool.connect();
     const {nombre, descripcion, precio}= producto;
     try {
         await client.query('BEGIN');
         const response = (await client.query(queriesProduct.UPDATE_PRODUCT,[nombre, descripcion, precio, idProducto])).rows[0];
-        const product: producto= {
+        const product: Product= {
             id_producto: response.id_producto,
             nombre: response.nombre,
             descripcion: response.descripcion,
@@ -96,12 +117,12 @@ export const updateProduct= async({producto, idProducto}:{producto:producto, idP
     }
 }
 
-export const setAvailability=async(idProducto:number): Promise<producto>=>{
+export const setAvailability=async(idProducto:number): Promise<Product>=>{
     const client = await pool.connect();
     try {
         await client.query('BEGIN');
         const response = (await client.query(queriesProduct.SET_AVAILABILITY,[idProducto])).rows[0];
-        const product: producto= {
+        const product: Product= {
             id_producto: response.id_producto,
             nombre: response.nombre,
             descripcion: response.descripcion,
