@@ -13,7 +13,7 @@ export default function AddProduct({navigation, route}:any) {
   const pickImage = async () => {
     let result = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    if(result.granted === false){
+    if(result.granted){
       alert('Permisos de Camara requeridos');
       return;
     }

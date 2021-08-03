@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, {useEffect} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable, FlatList, Image, RefreshControl } from 'react-native';
 import {Card } from 'react-native-elements'
-import { Premisess } from '../../interfaces/Premisess';
+import { Premise } from '../../interfaces/Premise';
 import { getPremisses} from '../../utils/premisess.comm';
 
 const premisess= ({navigation}:any)=>{
@@ -11,7 +11,7 @@ const premisess= ({navigation}:any)=>{
     const [refresh, setRefresh]= React.useState(false);
 
     const loadPremisess = async ()=>{
-        const premisess:Premisess[] = await getPremisses();
+        const premisess:Premise[] = await getPremisses();
         setEstablecimientos(premisess)
         setRefresh(false);
      //   setLoading(false);

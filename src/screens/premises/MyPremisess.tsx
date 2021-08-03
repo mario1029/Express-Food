@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, {useEffect} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable, SectionList, Image, Alert, RefreshControl } from 'react-native';
 import {Card } from 'react-native-elements'
-import { Premisess } from '../../interfaces/Premisess';
+import { Premise } from '../../interfaces/Premise';
 import { getPremissesByEmail, deletePremisses } from '../../utils/premisess.comm';
 
 const MyPremisess= ({navigation}:any)=>{
@@ -12,7 +12,7 @@ const MyPremisess= ({navigation}:any)=>{
     const [refresh, setRefresh]= React.useState(false);
 
     const loadPremisess = async ()=>{
-        const premisess:Premisess[] = await getPremissesByEmail();
+        const premisess:Premise[] = await getPremissesByEmail();
         
         setAprobadas(premisess.filter((rows)=>{
           return rows.aprobado==true
@@ -26,7 +26,7 @@ const MyPremisess= ({navigation}:any)=>{
     }
   
     const filterNotes = async (filter:string)=>{
-        const premisess:Premisess[] = await getPremissesByEmail();
+        const premisess:Premise[] = await getPremissesByEmail();
       setAprobadas(premisess.filter((rows)=>{
         return rows.aprobado==true
       }));

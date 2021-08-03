@@ -103,14 +103,14 @@ export function DrawerContent(props:any){
                                         name="plus-box-multiple"
                                         color={color}
                                         size={size} />}
-                                    label="addPremisess"
+                                    label="Add Premisess"
                                     onPress={() => props.navigation.navigate('addPremisess')} />
                             <DrawerItem
                                     icon={({ color, size }) => <Icon
                                         name="storefront-outline"
                                         color={color}
                                         size={size} />}
-                                    label="myPremisess"
+                                    label="My Premisess"
                                     onPress={() => props.navigation.navigate('myPremisess')} />
                             <DrawerItem
                                     icon={({ color, size }) => <Icon
