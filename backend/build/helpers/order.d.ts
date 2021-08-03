@@ -19,4 +19,9 @@ export declare const deleteOrderDetail: ({ idPedido, idProducto }: {
 }) => Promise<boolean>;
 export declare const deleteOrder: (idPedido: number) => Promise<boolean>;
 export declare const montOrder: (idPedido: number) => Promise<number>;
+export declare const getDirecByOrder: (idPedido: number) => Promise<{
+    nombre: any;
+    latitud: any;
+    longitud: any;
+}[]>;
 //# sourceMappingURL=order.d.ts.map

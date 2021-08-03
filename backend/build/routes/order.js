@@ -21,6 +21,15 @@ router.get('', async (req, res) => {
         res.status(500).json({ status: 500, error: e, message: 'Error al buscar los pedidos' });
     }
 });
+router.get('/direct/:id', async (req, res) => {
+    try {
+        const order = await order_1.getDirecByOrder(+req.params.id);
+        res.status(200).json({ status: 200, order: order, message: 'pedidos encontrados correctamente' });
+    }
+    catch (e) {
+        res.status(500).json({ status: 500, error: e, message: 'Error al buscar los pedidos' });
+    }
+});
 router.post('/new', async (req, res) => {
     try {
         const order = await order_1.createOrder(req.user.correo);

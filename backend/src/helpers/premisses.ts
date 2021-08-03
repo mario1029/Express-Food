@@ -17,7 +17,9 @@ export const getPremisess= async ():Promise<Premisess[]> =>{
                 direccion: rows.direccion,
                 urlPagina: rows.urlpagina,
                 aprobado: rows.aprobado,
-                urlFoto: rows.urlfoto
+                urlFoto: rows.urlfoto,
+                latitud: rows.latitud,
+                longitud: rows.longitud
             }
         })
         return user;
@@ -42,7 +44,9 @@ export const getPremisessByEmail= async (correo:string):Promise<Premisess[]> =>{
                 direccion: rows.direccion,
                 urlPagina: rows.urlpagina,
                 aprobado: rows.aprobado,
-                urlFoto: rows.urlfoto
+                urlFoto: rows.urlfoto,
+                latitud: rows.latitud,
+                longitud: rows.longitud
             }
         })
         return user;
@@ -66,7 +70,9 @@ export const getPremisessById= async (id:number):Promise<Premisess> =>{
             direccion: response.direccion,
             urlPagina: response.urlpagina,
             aprobado: response.aprobado,
-            urlFoto: response.urlfoto
+            urlFoto: response.urlfoto,
+            latitud: response.latitud,
+            longitud: response.longitud
         }
         return user;
     } catch (e) {
@@ -89,7 +95,9 @@ export const getPremisessByAddress= async (direccion:string):Promise<Premisess[]
                 numeroContacto: rows.numerocontacto,
                 direccion: rows.direccion,
                 urlPagina: rows.urlpagina,
-                urlFoto: rows.urlfoto
+                urlFoto: rows.urlfoto,
+                latitud: rows.latitud,
+                longitud: rows.longitud
             }
         })
         return user;
@@ -103,17 +111,19 @@ export const getPremisessByAddress= async (direccion:string):Promise<Premisess[]
 
 export const insertPremisess= async ({promisse,correo}:{promisse:Premisess, correo: string}):Promise<Premisess> =>{
     const client = await pool.connect();
-    const {nombre, direccion, correoE, numeroContacto, urlPagina}= promisse;
+    const {nombre, direccion, correoE, numeroContacto, urlPagina, latitud, longitud}= promisse;
     try {
         await client.query('BEGIN');
-        const response = (await client.query(queriesPremisess.INSERT_PREMISESS,[nombre, direccion, correoE, numeroContacto, urlPagina, correo])).rows[0];
+        const response = (await client.query(queriesPremisess.INSERT_PREMISESS,[nombre, direccion, correoE, numeroContacto, urlPagina, correo, latitud, longitud])).rows[0];
         const user: Premisess = {
             id_establecimiento:response.id_establecimiento,
             nombre: response.nombre,
             correoE: response.correoe,
             numeroContacto: response.numerocontacto,
             direccion: response.direccion,
-            urlPagina: response.urlpagina
+            urlPagina: response.urlpagina,
+            latitud: response.latitud,
+            longitud: response.longitud
         }
         await client.query('COMMIT');
         return user;

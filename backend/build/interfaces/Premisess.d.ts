@@ -7,5 +7,7 @@ export interface Premisess {
     urlPagina?: string;
     urlFoto?: string;
     aprobado?: boolean;
+    latitud?: number;
+    longitud?: number;
 }
 //# sourceMappingURL=Premisess.d.ts.map

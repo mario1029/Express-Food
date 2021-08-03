@@ -30,6 +30,7 @@ export declare const queriesOrder: {
     CREATE_ORDER: string;
     GET_ORDER: string;
     GET_ORDER_DETAIL: string;
+    GET_DIRECC_PREMISESS_IN_ORDER: string;
     INSERT_ORDER_DETAIL: string;
     UPDATE_ORDER_DETAIL: string;
     DELETE_ORDER_DETAIL: string;

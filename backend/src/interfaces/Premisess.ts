@@ -6,5 +6,7 @@ export interface Premisess{
     numeroContacto?: string,
     urlPagina?: string,
     urlFoto?: string,
-    aprobado?: boolean
+    aprobado?: boolean,
+    latitud?: number,
+    longitud?: number
 }

@@ -20,7 +20,9 @@ const getPremisess = async () => {
                 direccion: rows.direccion,
                 urlPagina: rows.urlpagina,
                 aprobado: rows.aprobado,
-                urlFoto: rows.urlfoto
+                urlFoto: rows.urlfoto,
+                latitud: rows.latitud,
+                longitud: rows.longitud
             };
         });
         return user;
@@ -47,7 +49,9 @@ const getPremisessByEmail = async (correo) => {
                 direccion: rows.direccion,
                 urlPagina: rows.urlpagina,
                 aprobado: rows.aprobado,
-                urlFoto: rows.urlfoto
+                urlFoto: rows.urlfoto,
+                latitud: rows.latitud,
+                longitud: rows.longitud
             };
         });
         return user;
@@ -73,7 +77,9 @@ const getPremisessById = async (id) => {
             direccion: response.direccion,
             urlPagina: response.urlpagina,
             aprobado: response.aprobado,
-            urlFoto: response.urlfoto
+            urlFoto: response.urlfoto,
+            latitud: response.latitud,
+            longitud: response.longitud
         };
         return user;
     }
@@ -98,7 +104,9 @@ const getPremisessByAddress = async (direccion) => {
                 numeroContacto: rows.numerocontacto,
                 direccion: rows.direccion,
                 urlPagina: rows.urlpagina,
-                urlFoto: rows.urlfoto
+                urlFoto: rows.urlfoto,
+                latitud: rows.latitud,
+                longitud: rows.longitud
             };
         });
         return user;
@@ -114,17 +122,19 @@ const getPremisessByAddress = async (direccion) => {
 exports.getPremisessByAddress = getPremisessByAddress;
 const insertPremisess = async ({ promisse, correo }) => {
     const client = await pool.connect();
-    const { nombre, direccion, correoE, numeroContacto, urlPagina } = promisse;
+    const { nombre, direccion, correoE, numeroContacto, urlPagina, latitud, longitud } = promisse;
     try {
         await client.query('BEGIN');
-        const response = (await client.query(queries_1.queriesPremisess.INSERT_PREMISESS, [nombre, direccion, correoE, numeroContacto, urlPagina, correo])).rows[0];
+        const response = (await client.query(queries_1.queriesPremisess.INSERT_PREMISESS, [nombre, direccion, correoE, numeroContacto, urlPagina, correo, latitud, longitud])).rows[0];
         const user = {
             id_establecimiento: response.id_establecimiento,
             nombre: response.nombre,
             correoE: response.correoe,
             numeroContacto: response.numerocontacto,
             direccion: response.direccion,
-            urlPagina: response.urlpagina
+            urlPagina: response.urlpagina,
+            latitud: response.latitud,
+            longitud: response.longitud
         };
         await client.query('COMMIT');
         return user;

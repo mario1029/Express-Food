@@ -163,3 +163,23 @@ export const montOrder= async(idPedido:number): Promise<number>=>{
         client.release();
     }
 }
+
+export const getDirecByOrder= async(idPedido:number)=>{
+    const client = await pool.connect();
+    try {
+        const response = (await client.query(queriesOrder.GET_DIRECC_PREMISESS_IN_ORDER,[idPedido])).rows;
+        const orderDirec=response.map((rows)=>{
+            return{
+                nombre:rows.nombre,
+                latitud:rows.latitud,
+                longitud:rows.longitud
+            }
+        });
+        return orderDirec;
+    } catch (e) {
+        console.log(e);
+        throw e;
+    } finally {
+        client.release();
+    }
+};

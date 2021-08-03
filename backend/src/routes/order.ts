@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createOrder, deleteOrder, deleteOrderDetail, getOrder, getOrderDetail, insertOrderDetail, montOrder, terminateOrder, updateOrderDetail } from '@helpers/order';
+import { createOrder, deleteOrder, deleteOrderDetail, getDirecByOrder, getOrder, getOrderDetail, insertOrderDetail, montOrder, terminateOrder, updateOrderDetail } from '@helpers/order';
 import { Order, DetailOrder } from '@interfaces/Order';
 import Stripe from "stripe";
 import { createPayment } from '@helpers/payment';
@@ -14,6 +14,15 @@ const router = Router();
 router.get('',async(req:any, res)=>{
     try {
         const order:Order[]= await getOrder(req.user.correo);
+        res.status(200).json({ status: 200, order: order, message: 'pedidos encontrados correctamente' });
+    } catch (e) {
+        res.status(500).json({ status: 500, error: e, message: 'Error al buscar los pedidos' });
+    }
+});
+
+router.get('/direct/:id',async(req, res)=>{
+    try {
+        const order= await getDirecByOrder(+req.params.id);
         res.status(200).json({ status: 200, order: order, message: 'pedidos encontrados correctamente' });
     } catch (e) {
         res.status(500).json({ status: 500, error: e, message: 'Error al buscar los pedidos' });
