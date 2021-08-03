@@ -1,5 +1,5 @@
-import { Usuario, UsuarioCompleto } from '@interfaces/usuario';
-export declare const signUpUser: (body: UsuarioCompleto) => Promise<Usuario>;
+import { User, UserComplete } from '@interfaces/User';
+export declare const signUpUser: (body: UserComplete) => Promise<User>;
 export declare const comparePassword: (candidate: any, hash: any) => Promise<unknown>;
-export declare const getUserByEmail: (correo: string) => Promise<UsuarioCompleto>;
+export declare const getUserByEmail: (correo: string) => Promise<UserComplete>;
 //# sourceMappingURL=session.d.ts.map

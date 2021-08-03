@@ -1,16 +1,16 @@
-import { establecimiento } from '@interfaces/establecimientos';
-export declare const getPremisess: () => Promise<establecimiento[]>;
-export declare const getPremisessByEmail: (correo: string) => Promise<establecimiento[]>;
-export declare const getPremisessById: (id: number) => Promise<establecimiento>;
-export declare const getPremisessByAddress: (direccion: string) => Promise<establecimiento[]>;
+import { Premisess } from '@interfaces/Premisess';
+export declare const getPremisess: () => Promise<Premisess[]>;
+export declare const getPremisessByEmail: (correo: string) => Promise<Premisess[]>;
+export declare const getPremisessById: (id: number) => Promise<Premisess>;
+export declare const getPremisessByAddress: (direccion: string) => Promise<Premisess[]>;
 export declare const insertPremisess: ({ promisse, correo }: {
-    promisse: establecimiento;
+    promisse: Premisess;
     correo: string;
-}) => Promise<establecimiento>;
+}) => Promise<Premisess>;
 export declare const updatePremisses: ({ promisse, id }: {
-    promisse: establecimiento;
+    promisse: Premisess;
     id: number;
-}) => Promise<establecimiento>;
-export declare const approvedPremisses: (id: number) => Promise<establecimiento>;
+}) => Promise<Premisess>;
+export declare const approvedPremisses: (id: number) => Promise<Premisess>;
 export declare const deletePremisses: (id: number) => Promise<boolean>;
 //# sourceMappingURL=premisses.d.ts.map

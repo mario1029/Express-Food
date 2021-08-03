@@ -19,6 +19,7 @@ export const queriesPremisess={
 }
 
 export const queriesProduct={
+  GET_PRODUCT:`SELECT * FROM producto  WHERE id_producto = $1`,
   GET_PRODUCT_BY_PREMISESS:`SELECT * FROM producto  WHERE id_establecimiento = $1`,
   GET_PRODUCT_BY_PREMISESS_FILTER:`SELECT * FROM producto WHERE id_establecimiento = $1 AND disponible = true`,
   INSERT_PRODUCT:`INSERT INTO producto (nombre, descripcion,precio, disponible, id_establecimiento) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
@@ -30,13 +31,14 @@ export const queriesProduct={
 
 export const queriesOrder={
   CREATE_ORDER:`INSERT INTO pedido (correo, fecha) values ($1, CURRENT_DATE) RETURNING *`,
-  GET_ORDER:`SELECT * FROM pedido WHERE correo  like  $1`,
-  GET_ORDER_DETAIL:`SELECT nombre, cantidad, SUM(precio * cantidad) as precio FROM producto, detalles_pedido WHERE producto.id_producto=detalles_pedido.id_producto  AND  id_pedido  = $1 GROUP BY nombre, cantidad;`,
+  GET_ORDER:`SELECT * FROM pedido WHERE correo  like  $1 AND finalizado IS NOT true`,
+  GET_ORDER_DETAIL:`SELECT producto.id_producto, nombre, cantidad, producto.precio, SUM(precio * cantidad) as precioTotal FROM producto, detalles_pedido WHERE producto.id_producto=detalles_pedido.id_producto  AND  id_pedido  = $1 GROUP BY nombre, cantidad, producto.id_producto;`,
   INSERT_ORDER_DETAIL:`INSERT INTO detalles_pedido (id_pedido, id_producto, cantidad) VALUES ($1, $2, $3) RETURNING *`,
   UPDATE_ORDER_DETAIL:`UPDATE detalles_pedido SET cantidad = $1  WHERE id_pedido = $2 AND id_producto  = $3 RETURNING *`,
   DELETE_ORDER_DETAIL:`DELETE FROM detalles_pedido WHERE id_pedido  = $1  AND id_producto = $2`,
   DELETE_ORDER:`DELETE FROM pedido WHERE id_pedido  = $1`,
-  MONT_ORDER:`SELECT SUM(precio * cantidad) FROM producto, detalles_pedido WHERE producto.id_producto=detalles_pedido.id_producto  AND  id_pedido  = $1`
+  MONT_ORDER:`SELECT SUM(precio * cantidad) FROM producto, detalles_pedido WHERE producto.id_producto=detalles_pedido.id_producto  AND  id_pedido  = $1`,
+  TERMINATE_PEDIDO:`UPDATE pedido SET finalizado = true WHERE id_pedido = $1 RETURNING *`
 }
 
 export const queriesPayment={

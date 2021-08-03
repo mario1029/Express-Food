@@ -1,14 +1,15 @@
-import { producto } from '@interfaces/producto';
-export declare const getProduct: (idEstablecimieto: number) => Promise<producto[]>;
-export declare const getProductFilter: (idEstablecimiento: number) => Promise<producto[]>;
+import { Product } from '@interfaces/Product';
+export declare const getProductDetail: (idProducto: number) => Promise<Product>;
+export declare const getProduct: (idEstablecimieto: number) => Promise<Product[]>;
+export declare const getProductFilter: (idEstablecimiento: number) => Promise<Product[]>;
 export declare const insertProduct: ({ producto, idEstablecimiento }: {
-    producto: producto;
+    producto: Product;
     idEstablecimiento: number;
-}) => Promise<producto>;
+}) => Promise<Product>;
 export declare const updateProduct: ({ producto, idProducto }: {
-    producto: producto;
+    producto: Product;
     idProducto: number;
-}) => Promise<producto>;
-export declare const setAvailability: (idProducto: number) => Promise<producto>;
+}) => Promise<Product>;
+export declare const setAvailability: (idProducto: number) => Promise<Product>;
 export declare const deleteProducto: (idProducto: number) => Promise<boolean>;
 //# sourceMappingURL=product.d.ts.map

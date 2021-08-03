@@ -1,11 +1,11 @@
 import Pool from '@utils/pool';
 import { queries } from '@utils/queries';
 import { compare, genSaltSync, hashSync } from 'bcryptjs';
-import { Usuario, UsuarioCompleto } from '@interfaces/usuario';
+import { User, UserComplete } from '@interfaces/User';
 
 const pool = Pool.getInstance();
 
-export const signUpUser = async function (body:UsuarioCompleto): Promise<Usuario> {
+export const signUpUser = async function (body:UserComplete): Promise<User> {
   const client = await pool.connect();
   const { nombre, correo, contrasenia, numero, direccion } = body;
   try {
@@ -13,7 +13,7 @@ export const signUpUser = async function (body:UsuarioCompleto): Promise<Usuario
     const salt = genSaltSync(10);
     const hashedPassword = hashSync(contrasenia, salt);
     const response = (await client.query(queries.SIGN_UP_USER, [correo, nombre, numero, direccion, hashedPassword])).rows[0];
-    const user: Usuario = {
+    const user: User = {
       nombre: response.nombre,
       correo: response.correo,
       numero: response.numero,
@@ -38,12 +38,12 @@ export const comparePassword = (candidate, hash) => {
   });
 };
 
-export const getUserByEmail = async (correo: string): Promise<UsuarioCompleto> => {
+export const getUserByEmail = async (correo: string): Promise<UserComplete> => {
   const client = await pool.connect();
 
   try {
     const response = (await client.query(queries.GET_USER_BY_EMAIL, [correo])).rows[0];
-    const users: UsuarioCompleto= {
+    const users: UserComplete= {
         nombre: response.nombre,
         correo: response.correo,
         contrasenia: response.contrasenia,

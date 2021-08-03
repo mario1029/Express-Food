@@ -64,5 +64,14 @@ router.delete('/:idProducto', async (req, res) => {
         res.status(500).json({ status: 500, error: e, message: 'Error al eliminar el producto' });
     }
 });
+router.get('/:idProducto', async (req, res) => {
+    try {
+        const producto = await product_1.getProductDetail(+req.params.idProducto);
+        res.status(200).json({ status: 200, producto: producto, message: 'producto encontrado correctamente' });
+    }
+    catch (e) {
+        res.status(500).json({ status: 500, error: e, message: 'Error al encontrar el producto' });
+    }
+});
 exports.default = router;
 //# sourceMappingURL=product.js.map

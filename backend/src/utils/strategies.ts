@@ -1,6 +1,6 @@
 import { getUserByEmail, comparePassword } from '@helpers/session';
 import { Strategy } from 'passport-local';
-import { UsuarioCompleto } from '@interfaces/usuario';
+import { UserComplete } from '@interfaces/User';
 
 export const LocalStrategy = new Strategy(
   {

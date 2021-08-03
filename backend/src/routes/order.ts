@@ -1,10 +1,11 @@
 import { Router } from 'express';
-import { createOrder, deleteOrder, deleteOrderDetail, getOrder, getOrderDetail, insertOrderDetail, montOrder, updateOrderDetail } from '@helpers/order';
-import { pedido, detallesPedido } from '@interfaces/pedido';
+import { createOrder, deleteOrder, deleteOrderDetail, getOrder, getOrderDetail, insertOrderDetail, montOrder, terminateOrder, updateOrderDetail } from '@helpers/order';
+import { Order, DetailOrder } from '@interfaces/Order';
 import Stripe from "stripe";
 import { createPayment } from '@helpers/payment';
 import pdfDocument from 'pdfkit';
 import fs from 'fs';
+import {headerPDF, tablePDF} from '@utils/generatePDF'
 
 const stripe = new Stripe('sk_test_51JIvqpL860qRAIcDiIK0nDBgdfE68TJDMNJdldtKH5Lj8xUC42TXUMDJzGaD5q5jrolwm6hYX0Z9QRV4ElELhnWG004J5wSnp3', { apiVersion: "2020-08-27" });
 
@@ -12,7 +13,7 @@ const router = Router();
 
 router.get('',async(req:any, res)=>{
     try {
-        const order:pedido[]= await getOrder(req.user.correo);
+        const order:Order[]= await getOrder(req.user.correo);
         res.status(200).json({ status: 200, order: order, message: 'pedidos encontrados correctamente' });
     } catch (e) {
         res.status(500).json({ status: 500, error: e, message: 'Error al buscar los pedidos' });
@@ -21,7 +22,7 @@ router.get('',async(req:any, res)=>{
 
 router.post('/new', async(req:any, res)=>{
     try {
-        const order:pedido= await createOrder(req.user.correo);
+        const order:Order= await createOrder(req.user.correo);
         res.status(200).json({ status: 200, order: order, message: 'pedido creado correctamente' });
     } catch (e) {
         res.status(500).json({ status: 500, error: e, message: 'Error al crear el pedido' });
@@ -62,62 +63,27 @@ router.get('/invoice/:id',async(req:any, res)=>{
     try {
         //busqueda de datos
         const mont:number= await montOrder(+req.params.id);
-        const detallesPedido: detallesPedido[]= await getOrderDetail(+req.params.id)
+        const detallesPedido: DetailOrder[]= await getOrderDetail(+req.params.id)
         const doc = new pdfDocument;
+        const todayDate = new Date(Date.now());
+        console.log(detallesPedido)
 
-        //generacion de pd
+        //generacion de pdf
         doc.pipe(fs.createWriteStream(`build/uploads/${req.user.correo}_Invoice${req.params.id}.pdf`));
-        doc.fontSize(20)
-        .text('Factura', {
-            align:'center',
-            stroke:true
+        
+        headerPDF({
+            pdf:doc,
+            id:+req.params.id,
+            amount:mont,
+            email:req.user.correo,
+            date:todayDate.toDateString()
         });
 
-        doc.moveDown();
+        tablePDF({
+            pdf:doc,
+            detail:detallesPedido
+        });
 
-        const productX = 50
-        const quantityX = 150
-        const priceX = 250
-        const topY= 150;
-
-        doc
-            .fontSize(12)
-            .text('Producto', productX, topY, {
-                align:'justify',
-                stroke:true
-            })
-            .text('Cantidad', quantityX, topY,{
-                align:'justify',
-                stroke:true
-            })
-            .text('Precio', priceX, topY,{
-                align:'rigth',
-                stroke:true
-            })
-        
-        doc.moveDown();
-        let i=1;
-        detallesPedido.forEach((rows)=>{
-            doc
-            .fontSize(12)
-            .text(rows.producto, productX, topY + 50*i, {
-                align:'justify'
-            })
-            .text(rows.cantidad.toString(), quantityX,  topY + 50*i, {
-                align:'justify'
-            })
-            .text(rows.precio.toString(), priceX,  topY + 50*i, {
-                align:'rigth'
-            })
-            i++;
-        })
-
-        doc
-            .fontSize(12)
-            .text("Monto", quantityX, topY+ 50*i, {
-                stroke:true
-            })
-            .text(`$ ${mont}`,priceX, topY+ 50*i )
         doc.end()
         res.status(200).json({ status: 200, message: 'Error al eliminar el pedido' });
     } catch (e) {
@@ -125,9 +91,18 @@ router.get('/invoice/:id',async(req:any, res)=>{
     }
 });
 
+router.put('/terminate/:id', async(req, res)=>{
+    try {
+        const result:boolean= await terminateOrder(+req.params.id);
+        res.status(200).json({ status: 200, order: result, message: 'pedido marcado como terminado correctamente' });
+    } catch (e) {
+        res.status(500).json({ status: 500, error: e, message: 'Error al buscar el pedido' });
+    }
+});
+
 router.get('/:id', async(req, res)=>{
     try {
-        const order:detallesPedido[]= await getOrderDetail(+req.params.id);
+        const order:DetailOrder[]= await getOrderDetail(+req.params.id);
         res.status(200).json({ status: 200, order: order, message: 'pedido encontrado correctamente' });
     } catch (e) {
         res.status(500).json({ status: 500, error: e, message: 'Error al buscar el pedido' });

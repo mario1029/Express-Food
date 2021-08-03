@@ -9,6 +9,7 @@ const stripe_1 = __importDefault(require("stripe"));
 const payment_1 = require("@helpers/payment");
 const pdfkit_1 = __importDefault(require("pdfkit"));
 const fs_1 = __importDefault(require("fs"));
+const generatePDF_1 = require("@utils/generatePDF");
 const stripe = new stripe_1.default('sk_test_51JIvqpL860qRAIcDiIK0nDBgdfE68TJDMNJdldtKH5Lj8xUC42TXUMDJzGaD5q5jrolwm6hYX0Z9QRV4ElELhnWG004J5wSnp3', { apiVersion: "2020-08-27" });
 const router = express_1.Router();
 router.get('', async (req, res) => {
@@ -64,59 +65,35 @@ router.get('/invoice/:id', async (req, res) => {
         const mont = await order_1.montOrder(+req.params.id);
         const detallesPedido = await order_1.getOrderDetail(+req.params.id);
         const doc = new pdfkit_1.default;
-        //generacion de pd
+        const todayDate = new Date(Date.now());
+        console.log(detallesPedido);
+        //generacion de pdf
         doc.pipe(fs_1.default.createWriteStream(`build/uploads/${req.user.correo}_Invoice${req.params.id}.pdf`));
-        doc.fontSize(20)
-            .text('Factura', {
-            align: 'center',
-            stroke: true
+        generatePDF_1.headerPDF({
+            pdf: doc,
+            id: +req.params.id,
+            amount: mont,
+            email: req.user.correo,
+            date: todayDate.toDateString()
         });
-        doc.moveDown();
-        const productX = 50;
-        const quantityX = 150;
-        const priceX = 250;
-        const topY = 150;
-        doc
-            .fontSize(12)
-            .text('Producto', productX, topY, {
-            align: 'justify',
-            stroke: true
-        })
-            .text('Cantidad', quantityX, topY, {
-            align: 'justify',
-            stroke: true
-        })
-            .text('Precio', priceX, topY, {
-            align: 'rigth',
-            stroke: true
+        generatePDF_1.tablePDF({
+            pdf: doc,
+            detail: detallesPedido
         });
-        doc.moveDown();
-        let i = 1;
-        detallesPedido.forEach((rows) => {
-            doc
-                .fontSize(12)
-                .text(rows.producto, productX, topY + 50 * i, {
-                align: 'justify'
-            })
-                .text(rows.cantidad.toString(), quantityX, topY + 50 * i, {
-                align: 'justify'
-            })
-                .text(rows.precio.toString(), priceX, topY + 50 * i, {
-                align: 'rigth'
-            });
-            i++;
-        });
-        doc
-            .fontSize(12)
-            .text("Monto", quantityX, topY + 50 * i, {
-            stroke: true
-        })
-            .text(`$ ${mont}`, priceX, topY + 50 * i);
         doc.end();
         res.status(200).json({ status: 200, message: 'Error al eliminar el pedido' });
     }
     catch (e) {
         res.status(500).json({ status: 500, error: e, message: 'Error al eliminar el pedido' });
+    }
+});
+router.put('/terminate/:id', async (req, res) => {
+    try {
+        const result = await order_1.terminateOrder(+req.params.id);
+        res.status(200).json({ status: 200, order: result, message: 'pedido marcado como terminado correctamente' });
+    }
+    catch (e) {
+        res.status(500).json({ status: 500, error: e, message: 'Error al buscar el pedido' });
     }
 });
 router.get('/:id', async (req, res) => {

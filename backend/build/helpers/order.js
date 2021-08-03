@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.montOrder = exports.deleteOrder = exports.deleteOrderDetail = exports.updateOrderDetail = exports.insertOrderDetail = exports.getOrderDetail = exports.getOrder = exports.createOrder = void 0;
+exports.montOrder = exports.deleteOrder = exports.deleteOrderDetail = exports.terminateOrder = exports.updateOrderDetail = exports.insertOrderDetail = exports.getOrderDetail = exports.getOrder = exports.createOrder = void 0;
 const pool_1 = __importDefault(require("@utils/pool"));
 const queries_1 = require("@utils/queries");
 const pool = pool_1.default.getInstance();
@@ -58,9 +58,11 @@ const getOrderDetail = async (id) => {
         const response = (await client.query(queries_1.queriesOrder.GET_ORDER_DETAIL, [id])).rows;
         const order = response.map((rows) => {
             return {
+                idProducto: rows.id_producto,
                 producto: rows.nombre,
                 cantidad: rows.cantidad,
-                precio: rows.precio
+                precio: rows.precio,
+                precioTotal: rows.preciototal
             };
         });
         return order;
@@ -110,6 +112,24 @@ const updateOrderDetail = async ({ idPedido, idProducto, cantidad }) => {
     }
 };
 exports.updateOrderDetail = updateOrderDetail;
+const terminateOrder = async (idPedido) => {
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        const response = (await client.query(queries_1.queriesOrder.TERMINATE_PEDIDO, [idPedido])).rowCount > 0;
+        await client.query('COMMIT');
+        return response;
+    }
+    catch (e) {
+        await client.query('CALLBACK');
+        console.log(e);
+        throw e;
+    }
+    finally {
+        client.release();
+    }
+};
+exports.terminateOrder = terminateOrder;
 const deleteOrderDetail = async ({ idPedido, idProducto }) => {
     const client = await pool.connect();
     try {

@@ -1,15 +1,15 @@
 import Pool from '@utils/pool';
 import { queriesOrder } from '@utils/queries';
-import { pedido, detallesPedido } from '@interfaces/pedido';
+import { Order, DetailOrder } from '@interfaces/Order';
 
 const pool = Pool.getInstance();
 
-export const createOrder= async(correo:string): Promise<pedido>=>{
+export const createOrder= async(correo:string): Promise<Order>=>{
     const client = await pool.connect();
     try {
         await client.query('BEGIN');
         const response = (await client.query(queriesOrder.CREATE_ORDER,[correo])).rows[0];
-        const order:pedido={
+        const order:Order={
             idPedido:response.id_pedido,
             correoU:response.correo,
             fecha:response.fecha
@@ -25,11 +25,11 @@ export const createOrder= async(correo:string): Promise<pedido>=>{
     }
 };
 
-export const getOrder= async(correo:string): Promise<pedido[]>=>{
+export const getOrder= async(correo:string): Promise<Order[]>=>{
     const client = await pool.connect();
     try {
         const response = (await client.query(queriesOrder.GET_ORDER,[correo])).rows;
-        const order:pedido[]=response.map((rows)=>{
+        const order:Order[]=response.map((rows)=>{
             return{
                 idPedido:rows.id_pedido,
                 correoU:rows.correo,
@@ -45,15 +45,17 @@ export const getOrder= async(correo:string): Promise<pedido[]>=>{
     }
 };
 
-export const getOrderDetail= async(id:number): Promise<detallesPedido[]>=>{
+export const getOrderDetail= async(id:number): Promise<DetailOrder[]>=>{
     const client = await pool.connect();
     try {
         const response = (await client.query(queriesOrder.GET_ORDER_DETAIL,[id])).rows;
-        const order:detallesPedido[]=response.map((rows)=>{
+        const order:DetailOrder[]=response.map((rows)=>{
             return{
+                idProducto:rows.id_producto,
                 producto:rows.nombre,
                 cantidad:rows.cantidad,
-                precio:rows.precio
+                precio:rows.precio,
+                precioTotal:rows.preciototal
             }
            
         })
@@ -87,6 +89,22 @@ export const updateOrderDetail= async({idPedido, idProducto, cantidad}:{idPedido
     try {
         await client.query('BEGIN');
         const response = (await client.query(queriesOrder.UPDATE_ORDER_DETAIL,[cantidad, idPedido, idProducto])).rowCount>0;
+        await client.query('COMMIT');
+        return response;
+    } catch (e) {
+        await client.query('CALLBACK');
+        console.log(e);
+        throw e;
+    } finally {
+        client.release();
+    }
+};
+
+export const terminateOrder= async(idPedido:number): Promise<boolean>=>{
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        const response = (await client.query(queriesOrder.TERMINATE_PEDIDO,[idPedido])).rowCount>0;
         await client.query('COMMIT');
         return response;
     } catch (e) {

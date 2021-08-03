@@ -1,7 +1,7 @@
-import { Usuario } from '@interfaces/usuario';
+import { User } from '@interfaces/User';
 export declare const updateUser: ({ body, idCorreo }: {
-    body: Usuario;
+    body: User;
     idCorreo: string;
-}) => Promise<Usuario>;
+}) => Promise<User>;
 export declare const deleteUser: (idCorreo: string) => Promise<boolean>;
 //# sourceMappingURL=users.d.ts.map

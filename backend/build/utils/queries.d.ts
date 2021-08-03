@@ -17,6 +17,7 @@ export declare const queriesPremisess: {
     DELETE_PREMISSE: string;
 };
 export declare const queriesProduct: {
+    GET_PRODUCT: string;
     GET_PRODUCT_BY_PREMISESS: string;
     GET_PRODUCT_BY_PREMISESS_FILTER: string;
     INSERT_PRODUCT: string;
@@ -34,6 +35,7 @@ export declare const queriesOrder: {
     DELETE_ORDER_DETAIL: string;
     DELETE_ORDER: string;
     MONT_ORDER: string;
+    TERMINATE_PEDIDO: string;
 };
 export declare const queriesPayment: {
     CREATE_PAYMENT: string;
