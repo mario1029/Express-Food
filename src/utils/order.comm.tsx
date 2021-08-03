@@ -9,6 +9,17 @@ export const getOrders = async()=>{
     return result;
 }
 
+export const getDirecOrders = async(id:number)=>{
+  const response = await fetch(`https://expressfoodserver.herokuapp.com/order/direct/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
+    const result = await response.json();
+    return result;
+}
+
 export const newOrder = async()=>{
   const response = await fetch(`https://expressfoodserver.herokuapp.com/order/new`, {
       method: "POST",

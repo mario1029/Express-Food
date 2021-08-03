@@ -82,7 +82,9 @@ const addPremisess= ({navigation}:any)=> {
             numeroContacto:numero,
             direccion:direccion,
             urlPagina:urlPagina,
-            urlFoto:''
+            urlFoto:'',
+            latitud:state.focusedLocation.longitude,
+            longitud:state.focusedLocation.latitude
         });
         console.log('aqui  ', image)
         if(result.status==200){

@@ -1,8 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, {useEffect} from 'react';
 import { StyleSheet, Text, View, Dimensions} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
-
+import { getDirecOrders } from '../../utils/order.comm';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Tracking() {
 
@@ -20,6 +21,27 @@ export default function Tracking() {
   });
 
   const [map, setMap] = React.useState(null);
+
+  // const localation= async()=>{
+  //   const id= await AsyncStorage.getItem('order');
+  //   const result = await getDirecOrders(+id);
+  //   if(result.status==200){
+  //     const order= result.order;
+  //     console.log(order);
+  //     setState({
+  //       focusedLocation: {
+  //         latitude: order[0].latitud,
+  //         longitude: order[0].longitud,
+  //         latitudeDelta: 0.0122,
+  //         longitudeDelta:
+  //           Dimensions.get('window').width /
+  //           Dimensions.get('window').height *
+  //           0.0122
+  //       },
+  //       locationChosen: false
+  //     });
+  //   }
+  // }
 
   const reset = () => {
     setState({
@@ -61,7 +83,6 @@ export default function Tracking() {
     });*/
   };
 
-
   return (
     <View style={styles.container}>
       <View style={styles.box}>
@@ -69,9 +90,11 @@ export default function Tracking() {
         <MapView
           style={styles.map}
           initialRegion={state.focusedLocation}
-          onPress={pickLocationHandler}
+          onPress={()=>{
+            pickLocationHandler;
+          }}
           showsUserLocation={true}
-          ref={ref => setMap(ref)}
+          ref={ref => {setMap(ref)}}
           >
               <Marker coordinate={state.focusedLocation} />
           </MapView>
